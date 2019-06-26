@@ -1,16 +1,19 @@
 
 #%%
-from bs4 import BeautifulSoup
-import requests
+from selenium import webdriver
 import pandas as pd 
 import numpy as np 
 #%%
-url = 'https://jan-sotelo-blc2.squarespace.com/config/analytics#sales-overview'
-Request = requests.get(url)
 
-#%%
-soup = BeautifulSoup(Request.text)
-soup.prettify()
-
+driver = webdriver.Chrome('/Users/keatra/Downloads/chromedriver')
+driver.get('https://www.instagram.com/_knesbitt/')
 #%%
 
+def IG_login(url, username, password):
+    driver.get(url)
+    driver.find_element_by_id(“ID”).send_keys(username)
+    driver.find_element_by_id (“ID”).send_keys(password)
+    driver.find_element_by_id(“submit”).click()
+
+
+#%%
