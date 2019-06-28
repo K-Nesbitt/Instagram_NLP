@@ -29,13 +29,24 @@ def main(webdriver, url, my_username, my_password):
     webdriver.find_element_by_xpath("//*[contains(text(), 'Not Now')]").click()
     time.sleep(3)
     #go to profile page
-    webdriver.find_element_by_css_selector("a[href*='/_knesbitt/']").click()
+    webdriver.find_element_by_css_selector("a[href*='/"+my_username+"/']").click()
+    time.sleep(5)
 
     #get total number of post and total number of followers
-
+    header_classes = webdriver.find_elements_by_class_name('_3dEHb')
+    info_list = []
+    for header in header_classes:
+        header_info = header.find_elements_by_class_name('LH36I')
+        for info in header_info:
+            text = info.text.split('\n')
+            info_list.append(text)       
+    print(info_list)
+    '''total_posts = info_list[0]
+    total_followers = info_list[1]
+    total_following = info_list[2]'''
 
     #scrape page for photos, datetime stamp, and caption
 
     #end session
     #webdriver.close()
-
+    return None #total_posts, total_followers
