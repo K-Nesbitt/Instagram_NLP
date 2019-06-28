@@ -4,8 +4,6 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-
-
 def expo_wait():
     '''
     expo wait - create an exponential random sleep time
@@ -30,23 +28,35 @@ def main(webdriver, url, my_username, my_password):
     time.sleep(3)
     #go to profile page
     webdriver.find_element_by_css_selector("a[href*='/"+my_username+"/']").click()
-    time.sleep(5)
+    time.sleep(10)
 
     #get total number of post and total number of followers
-    header_classes = webdriver.find_elements_by_class_name('_3dEHb')
-    info_list = []
-    for header in header_classes:
-        header_info = header.find_elements_by_class_name('LH36I')
-        for info in header_info:
-            text = info.text.split('\n')
-            info_list.append(text)       
-    print(info_list)
-    '''total_posts = info_list[0]
-    total_followers = info_list[1]
-    total_following = info_list[2]'''
+    list_elements = webdriver.find_elements_by_tag_name('li')
+
+    post_element = [x for x in list_elements if x.text.find('posts') != -1] 
+    total_posts = post_element[0].text
+    print(total_posts)    
+
+    followers_element = [x for x in list_elements if x.text.find('followers') != -1]
+    total_followers = followers_element[0].text
+    print(total_followers)
+    
+    following_element = [x for x in list_elements if x.text.find('following') != -1]
+    total_following = following_element[0].text    
 
     #scrape page for photos, datetime stamp, and caption
 
     #end session
     #webdriver.close()
-    return None #total_posts, total_followers
+    return None
+
+if __name__ == "__main__":
+        u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
+        p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
+        my_username = u.read().strip('\n')
+        my_password = p.read().strip('\n')
+        u.close()
+        p.close()
+        url = 'https://www.instagram.com/accounts/login'
+        driver = webdriver.Chrome('/Users/keatra/Downloads/chromedriver')
+        main(driver,url, my_username, my_password)
