@@ -61,7 +61,7 @@ def get_picture_links(webdriver, total_posts):
         pictures on the page'''
 
         num_posts = int(total_posts.split(' ')[0])   
-        pages = (num_posts//24)
+        pages = (num_posts//12)
         link_set = set()
         html = webdriver.find_element_by_tag_name('html')
 
@@ -97,13 +97,18 @@ def scrape_page(webdriver, links, username):
                 if len(likes_list) != 0:
                         num_likes = int(likes_list[1].text.split(' ')[0]) + 1
 
-                        title = webdriver.find_element_by_class_name('_6lAjh').text
-                        if title == username:
-                                caption_list = webdriver.find_elements_by_xpath("//div[@class='C4VMK']//span")
-                                '''num_of_comments = len(caption_list)'''
-                                caption = caption_list[0].text
-                        else:
+                        try:
+                                title = webdriver.find_element_by_class_name('_6lAjh').text
+                                if title == username:
+                                        caption_list = webdriver.find_elements_by_xpath("//div[@class='C4VMK']//span")
+                                        '''num_of_comments = len(caption_list)'''
+                                        caption = caption_list[0].text
+                                else:
+                                        caption = None
+                        except:
                                 caption = None
+                                continue
+
                         picture_info.append([num_likes, caption])
 
                 webdriver.close()

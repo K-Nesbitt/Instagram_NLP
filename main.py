@@ -13,8 +13,16 @@ p.close()
 
 #%%
 IGdriver = login(my_username, my_password)
+#%%
 my_posts , my_followers = totals(IGdriver)
+#%%
 p_links = get_picture_links(IGdriver, my_posts)
+#%%
 p_info = scrape_page(IGdriver, p_links, my_username)
+
+#%%
+
+
+
 
 #%%
