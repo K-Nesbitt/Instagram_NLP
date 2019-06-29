@@ -36,7 +36,7 @@ def main(webdriver, url, my_username, my_password):
     post_element = [x for x in list_elements if x.text.find('posts') != -1] 
     total_posts = post_element[0].text
     num_posts = int(post_element[0].text.split(' ')[0])    
-    pages = round(num_posts/12, 0)   
+    pages = (num_posts//24)
     followers_element = [x for x in list_elements if x.text.find('followers') != -1]
     total_followers = followers_element[0].text
     
@@ -45,8 +45,9 @@ def main(webdriver, url, my_username, my_password):
     total_following = following_element[0].text  '''  
 
     #scrape page for information on each picture
-    picture_info = []
-    element = webdriver.find_element_by_tag_name('article')
+    picture_info = set()
+    html = webdriver.find_element_by_tag_name('html')
+    
     for _ in range(pages):
         all_links = webdriver.find_elements_by_tag_name('a')   
         for link in all_links:
@@ -78,7 +79,7 @@ def main(webdriver, url, my_username, my_password):
                         # Switch focus back to main tab
                         webdriver.switch_to.window(webdriver.window_handles[0])    
                         time.sleep(5) 
-        element.send_keys(Keys.END)
+        html.send_keys(Keys.END)
         time.sleep(2)       
     #end session
     webdriver.close()
