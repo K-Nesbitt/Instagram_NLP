@@ -1,4 +1,5 @@
 import numpy as np 
+import pandas as pd 
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -107,7 +108,7 @@ def scrape_page(webdriver, links, username):
                                         caption = None
                         except:
                                 caption = None
-                                continue
+                                
 
                         picture_info.append([num_likes, caption])
 
@@ -119,15 +120,30 @@ def scrape_page(webdriver, links, username):
        
         return picture_info
 
+def go_to_friend(webdriver):
+
+        list_elements = webdriver.find_elements_by_tag_name('li')
+        followers_element = [x for x in list_elements if x.text.find('followers') != -1]
+        followers_element.get_attribute('href') 
+
+def save_csv(lst_of_lst, filename):
+        '''converts list of lists into a dataframe
+        and then saves the df as a csv file'''
+        columns = ['number_of_likes', 'caption']
+        df = pd.DataFrame(lst_of_lst, columns =columns)
+        df.to_csv(path_or_buf='/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}'.format(filename))
+        return None
 
 
-
-'''if __name__ == "__main__":
+if __name__ == "__main__":
         u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
         p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
         my_username = u.read().strip('\n')
         my_password = p.read().strip('\n')
         u.close()
-        p.close()'''
+        p.close()
+        IGdriver = login(my_username, my_password)
+        
+
        
 
