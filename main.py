@@ -28,7 +28,7 @@ my_df.head()
 my_df.to_csv(path_or_buf='/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/my_IG.csv')
 
 #%%
-users=['dj_bangs', 'blake.kelch', 'richardrobinsonmusic', 'jacidj', 
+users=['richardrobinsonmusic', 'jacidj', 
 'apollinas', 'outofpracticerhetorician', 'desireesteele']
 
 #%%
@@ -51,8 +51,12 @@ for user in users:
     
 
 #%%
-w = csv.writer(open("/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}.csv".format(user), "w"))
-    for key, val in users_dict.items():
-        w.writerow([key, val])
+w = csv.writer(open("/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}.csv".format('dj_bangs'), "w"))
+for key, val in users_dict.items():
+    w.writerow([key, val])
+
+#%%
+
+
 
 #%%
