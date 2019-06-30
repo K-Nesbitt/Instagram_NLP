@@ -96,7 +96,11 @@ def scrape_page(webdriver, links, username):
                 time.sleep(5)
                 likes_list = webdriver.find_elements_by_class_name('zV_Nj')
                 if len(likes_list) != 0:
-                        num_likes = int(likes_list[1].text.split(' ')[0]) + 1
+                        if len(likes_list) == 1:
+                                num_likes = int(likes_list[0].text.split(' ')[0])
+                        
+                        else:
+                                num_likes = int(likes_list[1].text.split(' ')[0]) + 1
 
                         try:
                                 title = webdriver.find_element_by_class_name('_6lAjh').text
@@ -119,12 +123,7 @@ def scrape_page(webdriver, links, username):
                 time.sleep(5)        
        
         return picture_info
-
-def go_to_friend(webdriver):
-
-        list_elements = webdriver.find_elements_by_tag_name('li')
-        followers_element = [x for x in list_elements if x.text.find('followers') != -1]
-        followers_element.get_attribute('href') 
+ 
 
 def save_csv(lst_of_lst, filename):
         '''converts list of lists into a dataframe
@@ -135,7 +134,7 @@ def save_csv(lst_of_lst, filename):
         return None
 
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
         u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
         p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
         my_username = u.read().strip('\n')
@@ -143,7 +142,14 @@ if __name__ == "__main__":
         u.close()
         p.close()
         IGdriver = login(my_username, my_password)
-        
+        time.sleep(10)
+        user = 'dj_bangs'
+        IGdriver.get('https://www.instagram.com/{}/'.format(user))
+        user_posts, user_followers = totals(IGdriver)
+        time.sleep(3)
+        user_links = get_picture_links(IGdriver, user_posts)
+        time.sleep(5)
+        user_info = scrape_page(IGdriver, user_links, user)'''
 
        
 
