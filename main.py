@@ -1,5 +1,5 @@
 #%% 
-from functions import login, totals, get_picture_links, scrape_page, users_scrape_save, csvs_to_df, clean_text
+from functions import login, totals, get_picture_links, scrape_page, csvs_to_df, clean_text, users_scrape_save
 import pandas as pd 
 import time
 import csv 
@@ -24,36 +24,16 @@ p_info = scrape_page(IGdriver, p_links, my_username)
 
 #%%
 #Get information from other users page's
-users=['jhousesrt8','cclay2', 'copperhead_etx', 'faithandfuel', 
-'mckensiejoo','oletheamclachlan', 'happy_hollydays', 'fitness_with_mercy',
-'briannanmoore13']
+data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
 
+users=[]
+users_scrape_save(my_username, my_password, users, data_path)
 
-
+#%%
+#combine csvs to a dataframe
+df = csvs_to_df(data_path)
+clean_df  = clean_text(df)
+clean_df.head()
 #%%
 
 
-    
-
-#%%
-
-
-#%%
-concatenated_df.iloc[:, 1] = concatenated_df.iloc[:, 1].map(lambda row: 
-        row.lower().replace('#', '').replace('@', ''), 
-        na_action = 'ignore')
-
-#%%
-
-
-#%%
-
-
-
-#%%
-
-
-#%%
-
-
-#%%
