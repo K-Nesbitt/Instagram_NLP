@@ -1,10 +1,9 @@
 #%% 
-from functions import login, totals, get_picture_links, scrape_page, csvs_to_df, clean_text, users_scrape_save
+from scraping import login, totals, get_picture_links, scrape_page, users_scrape_save
+from transforming import  csvs_to_df, clean_text
 import pandas as pd 
-import time
-import csv 
-import glob
-import re
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.model_selection import train_test_split
 
 #%%
 #Open files with my username and password stored
@@ -23,9 +22,10 @@ p_links = get_picture_links(IGdriver, my_posts)
 p_info = scrape_page(IGdriver, p_links, my_username)
 
 #%%
-#Get information from other users page's
 data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
 
+#%%
+#Get information from other users page's
 users=[]
 users_scrape_save(my_username, my_password, users, data_path)
 
@@ -33,7 +33,19 @@ users_scrape_save(my_username, my_password, users, data_path)
 #combine csvs to a dataframe
 df = csvs_to_df(data_path)
 clean_df  = clean_text(df)
-clean_df.head()
+clean_df
+#%%
+corpus = []
+for row in clean_df['caption']:
+    if row == []:
+        corpus.append('None')
+    else:
+        corpus.append(str(' '.join(row)))
+print(corpus)
+
 #%%
 
 
+
+
+#%%
