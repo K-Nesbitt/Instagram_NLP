@@ -24,8 +24,9 @@ p_info = scrape_page(IGdriver, p_links, my_username)
 #%%
 
 #%%
-users=['richardrobinsonmusic', 'jacidj', 
-'apollinas', 'outofpracticerhetorician', 'desireesteele']
+users=['jhousesrt8','cclay2', 'copperhead_etx', 'faithandfuel', 
+'mckensiejoo','oletheamclachlan', 'happy_hollydays', 'fitness_with_mercy',
+'briannanmoore13', 'adizz82', 'sirlawrencecharles', 'phensworld']
 
 #%%
 IGdriver = login(my_username, my_password)

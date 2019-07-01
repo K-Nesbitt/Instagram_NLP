@@ -94,28 +94,30 @@ def scrape_page(webdriver, links, username):
                 webdriver.switch_to.window(webdriver.window_handles[1])
                 webdriver.get(link)
                 time.sleep(5)
-                likes_list = webdriver.find_elements_by_class_name('zV_Nj')
-                if len(likes_list) != 0:
-                        if len(likes_list) == 1:
-                                num_likes = int(likes_list[0].text.split(' ')[0])
-                        
-                        else:
-                                num_likes = int(likes_list[1].text.split(' ')[0]) + 1
-
-                        try:
-                                title = webdriver.find_element_by_class_name('_6lAjh').text
-                                if title == username:
-                                        caption_list = webdriver.find_elements_by_xpath("//div[@class='C4VMK']//span")
-                                        '''num_of_comments = len(caption_list)'''
-                                        caption = caption_list[0].text
-                                else:
-                                        caption = None
-                        except:
-                                caption = None
+                try:
+                        likes_list = webdriver.find_elements_by_class_name('zV_Nj')
+                        if len(likes_list) != 0:
+                                if len(likes_list) == 1:
+                                        num_likes = 5
                                 
+                                else:
+                                        num_likes = int(likes_list[1].text.split(' ')[0]) + 1
 
-                        picture_info.append([num_likes, caption])
+                                try:
+                                        title = webdriver.find_element_by_class_name('_6lAjh').text
+                                        if title == username:
+                                                caption_list = webdriver.find_elements_by_xpath("//div[@class='C4VMK']//span")
+                                                '''num_of_comments = len(caption_list)'''
+                                                caption = caption_list[0].text
+                                        else:
+                                                caption = None
+                                except:
+                                        caption = None
+                                        
 
+                                picture_info.append([num_likes, caption])
+                except:
+                        num_likes = None 
                 webdriver.close()
                 
                 # Switch focus back to main tab
