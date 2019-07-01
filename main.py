@@ -3,6 +3,7 @@ from functions import login, totals, get_picture_links, scrape_page
 import pandas as pd 
 import time
 import csv 
+import glob
 #%%
 #Open files with my username and password stored
 u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
@@ -11,7 +12,6 @@ my_username = u.read().strip('\n')
 my_password = p.read().strip('\n')
 u.close()
 p.close()
-
 
 #%%
 #Get information from my own profile page
@@ -45,7 +45,14 @@ for user in users:
     
 
 #%%
+#open all csv's and save to pandas df
+path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
+all_files = glob.glob(path + '/*.csv')
+df_from_each_file = (pd.read_csv(f, usecols=[1,2]) for f in all_files)
+concatenated_df  = pd.concat(df_from_each_file, ignore_index=False)
+concatenated_df.head()
 
+|#%%
 
 
 #%%
