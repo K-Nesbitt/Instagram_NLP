@@ -1,10 +1,8 @@
-#%% 
 from functions import login, totals, get_picture_links, scrape_page
 import pandas as pd 
 import time
 import csv 
-#%%
-#Open files with my username and password stored
+
 u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
 p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
 my_username = u.read().strip('\n')
@@ -12,21 +10,8 @@ my_password = p.read().strip('\n')
 u.close()
 p.close()
 
+users = ['adizz82', 'sirlawrencecharles', 'phensworld', 'fresco5280', 'jarronpaul', 'caseybarnold']
 
-#%%
-#Get information from my own profile page
-IGdriver = login(my_username, my_password)
-my_posts , my_followers = totals(IGdriver)
-p_links = get_picture_links(IGdriver, my_posts)
-p_info = scrape_page(IGdriver, p_links, my_username)
-
-#%%
-users=['jhousesrt8','cclay2', 'copperhead_etx', 'faithandfuel', 
-'mckensiejoo','oletheamclachlan', 'happy_hollydays', 'fitness_with_mercy',
-'briannanmoore13']
-
-#%%
-#Get information from other users page's
 IGdriver = login(my_username, my_password)
 
 for user in users:
@@ -42,10 +27,3 @@ for user in users:
 
     df = pd.DataFrame(user_info, columns=['number_of_likes', 'caption'])
     df.to_csv(path_or_buf='/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}.csv'.format(user))
-    
-
-#%%
-
-
-
-#%%
