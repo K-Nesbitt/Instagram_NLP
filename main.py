@@ -26,6 +26,7 @@ data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
 
 #%%
 #Get information from other users page's
+data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
 users=[]
 users_scrape_save(my_username, my_password, users, data_path)
 
@@ -41,11 +42,14 @@ for row in clean_df['caption']:
         corpus.append('None')
     else:
         corpus.append(str(' '.join(row)))
-print(corpus)
 
+Xtrain, Xtext, ytrain, ytest = train_test_split(corpus, clean_df['number_of_likes'])
 #%%
-
-
+#Create vectorizer with a minimum document frequency of 2%
+vectorizer = CountVectorizer(min_df=.02)
+X = vectorizer.fit_transform(Xtrain)
+popular_words = vectorizer.get_feature_names()
+#%%
 
 
 #%%
