@@ -60,8 +60,8 @@ def totals(webdriver):
 def get_picture_links(webdriver, total_posts):
         '''This function will find all links that have
         pictures on the page'''
-
-        num_posts = int(total_posts.split(' ')[0])   
+        posts = total_posts.split(' ')[0].replace(',', '')
+        num_posts = int(posts)   
         pages = (num_posts//12)
         link_set = set()
         html = webdriver.find_element_by_tag_name('html')
@@ -143,8 +143,9 @@ def save_csv(lst_of_lst, filename):
         p.close()
         IGdriver = login(my_username, my_password)
         time.sleep(10)
-        user = 'dj_bangs'
+        user = 'richardrobinsonmusic'
         IGdriver.get('https://www.instagram.com/{}/'.format(user))
+        time.sleep(5)
         user_posts, user_followers = totals(IGdriver)
         time.sleep(3)
         user_links = get_picture_links(IGdriver, user_posts)

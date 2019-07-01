@@ -22,10 +22,6 @@ p_links = get_picture_links(IGdriver, my_posts)
 p_info = scrape_page(IGdriver, p_links, my_username)
 
 #%%
-my_df = pd.DataFrame(p_info, columns=['number_of_likes', 'caption'])
-my_df.head()
-#%%
-my_df.to_csv(path_or_buf='/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/my_IG.csv')
 
 #%%
 users=['richardrobinsonmusic', 'jacidj', 
@@ -34,7 +30,6 @@ users=['richardrobinsonmusic', 'jacidj',
 #%%
 IGdriver = login(my_username, my_password)
 
-users_dict = {}
 for user in users:
     time.sleep(5)
     IGdriver.get('https://www.instagram.com/{}/'.format(user))
@@ -44,18 +39,16 @@ for user in users:
     user_links = get_picture_links(IGdriver, user_posts)
     time.sleep(7)
     user_info = scrape_page(IGdriver, user_links, user)
-    users_dict[user] = [user_posts, user_followers, user_info]
+    #users_dict[user] = [user_posts, user_followers, user_info]
 
     df = pd.DataFrame(user_info, columns=['number_of_likes', 'caption'])
     df.to_csv(path_or_buf='/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}.csv'.format(user))
     
 
 #%%
-w = csv.writer(open("/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}.csv".format('dj_bangs'), "w"))
-for key, val in users_dict.items():
-    w.writerow([key, val])
 
 #%%
+user_info
 
 
 
