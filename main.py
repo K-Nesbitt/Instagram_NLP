@@ -77,20 +77,26 @@ plt.savefig('images/number_of_followers.png', facecolor = 'white')
 corpus = []
 for row in likes_caption_df['caption']:
     if row == []:
-        corpus.append(None)
+        corpus.append('')
     else:
         corpus.append(str(' '.join(row)))
 
 Xtrain, Xtext, ytrain, ytest = train_test_split(corpus, likes_caption_df['number_of_likes'])
 #%%
-#Create vectorizer with a minimum document frequency of 2%
-vectorizer = CountVectorizer(min_df=.02)
-X = vectorizer.fit_transform(Xtrain)
-popular_words = vectorizer.get_feature_names()
+#Create Tf-dif vectorizer
+vector_tf = TfidfVectorizer(min_df=0.02)
+X = vector_tf.fit_transform(Xtrain)
+popular_words_tf = vector_tf.get_feature_names()
+popular_words_tf
+
+
 
 
 #%%
-
+#Create Countvectorizer with a minimum document frequency of 2%
+vector_cv = CountVectorizer(min_df=.02)
+X_cv = vectorizer.fit_transform(Xtrain)
+popular_words_cv = vectorizer.get_feature_names()
 
 #%%
 
