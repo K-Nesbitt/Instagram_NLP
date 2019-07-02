@@ -41,7 +41,7 @@ df_raw.head()
 #This function will lowercase, remove special characters, stem,
 # remove stopwords, and tokenize the words
 likes_caption_df  = clean_text(df_raw)
-likes_caption_df
+likes_caption_df.head()
 
 #%%
 #Plot the number of likes on a histogram
@@ -109,26 +109,9 @@ for i in range(len(corpus)):
             corpus_two.append(words[j])
 '''len(corpus_two) = 80273'''
 #%%
-#Create a frequency distribution for the words in the corpus_
+#Create a frequency distribution for the words in the corpus_two
 fdist = FreqDist(word for word in corpus_two)    
-
-'''fdist.max() = love'''
-#%%
 fdist.pprint(maxlen=15)
+#%%
 
 
-#%%
-plt.figure(figsize=(10,10))
-fdist.plot(30, cumulative=False)
-plt.savefig('images/frequency_words.png', facecolor='white')
-
-#%%
-fdist_sort = sorted(fdist.items())
-word, freq = zip(*fdist_sort)
-#%%
-freq[0:15]
-
-#%%
-fig, ax = plt.subplots(figsize= (10,10))
-ax.plot(word[0,10], freq)
-ax.set_title
