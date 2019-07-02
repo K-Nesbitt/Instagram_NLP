@@ -1,14 +1,14 @@
 # Instagram NLP
 
-Goal: The goal of this project is to discover the relationship between the caption and the number of likes on a picture from Instagram
+**Goal**: The goal of this project is to discover the relationship between the caption and the number of likes on a picture from Instagram
 
-Data Collection: I collected my data by scraping Instagram profiles and recorded the following information:
+**Data Collection**: I collected my data by scraping Instagram profiles and recorded the following information:
           - number of posts
           - number of followers
           - number of likes for pictures only
           - the caption of the photo
 
-Issues: Some issues I encountered were getting the number of likes when it was not displayed as 
+**Issues**: Some issues I encountered were getting the number of likes when it was not displayed as 
 " Liked by users_friend and 30 others". If the post said "_ likes" then it was a button and I defaulted to say the number of likes was equal to 5. According to Instagram myth, if a frequent user likes your photo, no matter how few others liked it, then the post would still read "Liked by frequent_friend and _ others" and the _ others could be as small as 1. Therefore I assumed there would be a low number of posts that were not liked by a frequent friend of that user. 
 
 
@@ -38,7 +38,22 @@ The most number of likes was 402, again from the local musician. The caption rea
  #iceland #niceland #LITlit #workaction #reykjavik #reiadventures #reishoot #bluelagoon #mountains #inclusivity #beach #hiking #whyhike #optoutside #adventures #travel #europe"*
                     
 ## Results
-Using sklearn's Tdidf text vectorizer I found the most popular names (term frequency of at least 2%) to be: 
+Using sklearn's Tdidf text vectorizer I found the most popular names to be:
+
+**_Top 3%_**
+
+beauti, day, friend, get, go, good, got, great, happi, im, know, life, 
+
+like, **lit**, littl, love, new, night, one, see, thank, time, today, work, year
+
+**_Top 5%_**
+
+day, get, love, time, today
+
+
+**_Only word in top 10% (most used word): LOVE_**
+
+
 
 ## Reflection
 I would like to collect data on more users outside of Austin and Texas. I would also like to collect data on the timestamp so that I could recommend the best time to post a picture and the words to use to maximize the number of likes. 
