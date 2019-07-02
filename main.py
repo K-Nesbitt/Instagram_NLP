@@ -4,7 +4,7 @@ from transforming import  csvs_to_df, clean_text
 import pandas as pd 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.model_selection import train_test_split
-
+import time
 #%%
 #Open files with my username and password stored
 u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
@@ -51,6 +51,22 @@ popular_words = vectorizer.get_feature_names()
 popular_words
 
 #%%
-
-
+names = ['adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
+'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8', '_knesbitt', 'mckensiejoo', 'oletheamclachlan',
+'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles']
+totals_dict = {} 
+driver = login(my_username, my_password)
+for name in names:
+    driver.get('https://www.instagram.com/{}/'.format(name))
+    time.sleep(5)
+    total_posts , total_followers  = totals(driver)
+    totals_dict[name] = [total_posts.split(' ')[0].replace(',', ''), total_followers.split(' ')[0].replace(',', '')]
+driver.close()
 #%%
+
+df_totals  = pd.DataFrame.from_dict(totals_dict, orient='index', dtype = int, columns = ['number_of_posts', 'number_of_followers'])
+df_totals = df_totals.astype(int)
+df_totals.describe()
+#%%
+
+
