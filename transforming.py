@@ -16,34 +16,12 @@ def csvs_to_df(path):
         concatenated_df['caption'] = concatenated_df['caption'].astype(str)
         return concatenated_df
 
-'''emoji_pattern = re.compile("["
-        u"\U0001F600-\U0001F64F"  # emoticons
-        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-        u"\U0001F680-\U0001F6FF"  # transport & map symbols
-        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-        u"\U0001F1F2-\U0001F1F4"  # Macau flag
-        u"\U0001F1E6-\U0001F1FF"  # flags
-        u"\U0001F600-\U0001F64F"
-        u"\U00002702-\U000027B0"
-        u"\U000024C2-\U0001F251"
-        u"\U0001f926-\U0001f937"
-        u"\U0001F1F2"
-        u"\U0001F1F4"
-        u"\U0001F620"
-        u"\u200d"
-        u"\u2640-\u2642"
-        "]+", flags=re.UNICODE)'''
-
 def clean_text(df):
     '''This function will clean the caption column of the dataframe
     and return a transformed df'''
 
     #lowercase all words
     df['caption'] = df['caption'].str.lower()
-    
-    '''#remove all emojis
-    df['caption'] = df['caption'].map(lambda row: 
-                            emoji_pattern.sub('', row), na_action = 'ignore')'''
     
     #remove special characters
     strip_chars = "@#.?,!;:/\/'()&<>"
@@ -61,3 +39,30 @@ def clean_text(df):
     df['caption'] = df['caption'].apply(lambda row: word_tokenize(' '.join(row)))
 
     return df
+
+
+def separate_emojis(df):
+        emoji_pattern = re.compile("["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+        u"\U0001F1F2-\U0001F1F4"  # Macau flag
+        u"\U0001F1E6-\U0001F1FF"  # flags
+        u"\U0001F600-\U0001F64F"
+        u"\U00002702-\U000027B0"
+        u"\U000024C2-\U0001F251"
+        u"\U0001f926-\U0001f937"
+        u"\U0001F1F2"
+        u"\U0001F1F4"
+        u"\U0001F620"
+        u"\u200d"
+        u"\u2640-\u2642"
+        "]+", flags=re.UNICODE)
+
+        
+        df['caption'] = df['caption'].map(lambda row: 
+                            emoji_pattern.sub('', row), na_action = 'ignore')
+
+   
+    

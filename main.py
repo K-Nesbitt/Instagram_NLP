@@ -33,26 +33,16 @@ users_scrape_save(my_username, my_password, users)
 #combine csvs to a dataframe
 data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
 df = csvs_to_df(data_path)
-clean_df  = clean_text(df)
-clean_df
+likes_caption_df  = clean_text(df)
+likes_caption_df
 #%%
-corpus = []
-for row in clean_df['caption']:
-    if row == []:
-        corpus.append('None')
-    else:
-        corpus.append(str(' '.join(row)))
-
-Xtrain, Xtext, ytrain, ytest = train_test_split(corpus, clean_df['number_of_likes'])
-#%%
-#Create vectorizer with a minimum document frequency of 2%
-vectorizer = CountVectorizer(min_df=.02)
-X = vectorizer.fit_transform(Xtrain)
-popular_words = vectorizer.get_feature_names()
-#%%
-popular_words
+fig, ax3 = plt.subplots()
+likes_caption_df.hist(column = 'number_of_likes', ax = ax3, figsize = (8,8), bins = 40, color = 'orange')
+plt.savefig('images/number_of_likes.png', facecolor = 'white')
 
 #%%
+#collect data on each persons total posts and followers. 
+# Create dataframe with information for user by row
 names = ['adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
 'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8', '_knesbitt', 'mckensiejoo', 'oletheamclachlan',
 'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles']
@@ -64,11 +54,10 @@ for name in names:
     total_posts , total_followers  = totals(driver)
     totals_dict[name] = [total_posts.split(' ')[0].replace(',', ''), total_followers.split(' ')[0].replace(',', '')]
 driver.close()
-#%%
 
 df_totals  = pd.DataFrame.from_dict(totals_dict, orient='index', dtype = int, columns = ['number_of_posts', 'number_of_followers'])
 df_totals = df_totals.astype(int)
-df_totals.describe()
+
 #%%
 fig, ax1 = plt.subplots()
 df_totals.hist(column = 'number_of_posts', ax = ax1, figsize = (8,8), bins = 20, color = 'green')
@@ -78,8 +67,21 @@ fig, ax2 = plt.subplots()
 df_totals.hist(column = 'number_of_followers', ax = ax2, figsize = (8,8), bins = 20, color= 'purple')
 plt.savefig('images/number_of_followers.png', facecolor = 'white')
 
-
 #%%
+corpus = []
+for row in likes_caption_df['caption']:
+    if row == []:
+        corpus.append(None)
+    else:
+        corpus.append(str(' '.join(row)))
 
+Xtrain, Xtext, ytrain, ytest = train_test_split(corpus, likes_caption_df['number_of_likes'])
+#%%
+#Create vectorizer with a minimum document frequency of 2%
+vectorizer = CountVectorizer(min_df=.02)
+X = vectorizer.fit_transform(Xtrain)
+popular_words = vectorizer.get_feature_names()
+#%%
+popular_words
 
 #%%
