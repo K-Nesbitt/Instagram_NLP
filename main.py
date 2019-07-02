@@ -130,12 +130,13 @@ vocab = vector_train.vocabulary_
 ignored_words = vector_train.stop_words_
 #consider adding ignored words to presentation
 #%%
+#Create Xtest vector from Xtrain vocabulary
 vector_test = TfidfVectorizer(vocabulary=vocab)
 X_vect = vector_test.fit_transform(Xtest)
 X_test = X_vect.toarray().astype(int)
 
 #%%
-#Random Forest Estimator
+#Random Forest Regression Model
 rf = RandomForestRegressor(n_estimators = 100, n_jobs=-1)
 rf.fit(X_train, ytrain)
 print("Random Forest score:", rf.score(X_test, ytest))
@@ -143,10 +144,11 @@ print("Random Forest score:", rf.score(X_test, ytest))
 
 
 #%%
+#Linear Regression Model
 lmodel = LinearRegression()
 lmodel.fit(X_train, ytrain)
 
-print('Linear Regression score:', lmodel.score(X_test, yest))
+print('Linear Regression score:', lmodel.score(X_test, ytest))
 
 
 #%%
