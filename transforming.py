@@ -41,7 +41,7 @@ def clean_text(df):
     return df
 
 
-def separate_emojis(df):
+'''def separate_emojis(df):
         emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
         u"\U0001F300-\U0001F5FF"  # symbols & pictographs
@@ -63,6 +63,5 @@ def separate_emojis(df):
         
         df['caption'] = df['caption'].map(lambda row: 
                             emoji_pattern.sub('', row), na_action = 'ignore')
+'''
 
-   
-    

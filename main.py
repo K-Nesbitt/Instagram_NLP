@@ -5,6 +5,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.model_selection import train_test_split
 import time
+import emoji
 import matplotlib.pyplot as plt 
 plt.style.use('fivethirtyeight')
 #%%
@@ -32,9 +33,14 @@ users_scrape_save(my_username, my_password, users)
 #%%
 #combine csvs to a dataframe
 data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
-df = csvs_to_df(data_path)
-likes_caption_df  = clean_text(df)
+df_raw = csvs_to_df(data_path)
+df_raw
+#%%
+#This function will lowercase, remove special characters, stem,
+#  remove stopwords, and tokenize the words
+likes_caption_df  = clean_text(df_raw)
 likes_caption_df
+
 #%%
 fig, ax3 = plt.subplots()
 likes_caption_df.hist(column = 'number_of_likes', ax = ax3, figsize = (8,8), bins = 40, color = 'orange')
@@ -81,7 +87,16 @@ Xtrain, Xtext, ytrain, ytest = train_test_split(corpus, likes_caption_df['number
 vectorizer = CountVectorizer(min_df=.02)
 X = vectorizer.fit_transform(Xtrain)
 popular_words = vectorizer.get_feature_names()
-#%%
-popular_words
 
+
+#%%
+
+
+#%%
+
+
+#%%
+
+    
+    
 #%%
