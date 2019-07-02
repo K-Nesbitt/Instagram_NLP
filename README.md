@@ -31,3 +31,10 @@ The lowest number of followers was 169 and the highest was 2161 (a local musicia
 The average number of likes is 31. The most likes was 402. (Again from the musician)
 ![hist3](https://github.com/K-Nesbitt/Instagram_likes_nlp/blob/master/images/number_of_likes.png)
 
+## Results
+Using sklearn's Tdidf text vectorizer I found the most popular names (term frequency of at least 2%) to be: 
+
+## Reflection
+I would like to collect data on more users outside of Austin and Texas. I would also like to collect data on the timestamp so that I could recommend the best time to post a picture and the words to use to maximize the number of likes. 
+
+I realize that the goal of this project can seem superficial but it was really interesting to continue building my webscraping skills, see real world data with something that I use daily, and conduct natural language processing on the information that I found. 
