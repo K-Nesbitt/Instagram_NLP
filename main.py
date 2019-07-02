@@ -21,17 +21,15 @@ my_posts , my_followers = totals(IGdriver)
 p_links = get_picture_links(IGdriver, my_posts)
 p_info = scrape_page(IGdriver, p_links, my_username)
 
-#%%
-
 
 #%%
 #Get information from other users page's
-data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
 users=['caseybarnold', 'adizz82', 'sirlawrencecharles', 'fresco5280', 'phensworld']
-users_scrape_save(my_username, my_password, users, data_path)
+users_scrape_save(my_username, my_password, users)
 
 #%%
 #combine csvs to a dataframe
+data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data'
 df = csvs_to_df(data_path)
 clean_df  = clean_text(df)
 clean_df
@@ -50,7 +48,7 @@ vectorizer = CountVectorizer(min_df=.02)
 X = vectorizer.fit_transform(Xtrain)
 popular_words = vectorizer.get_feature_names()
 #%%
-
+popular_words
 
 #%%
 
