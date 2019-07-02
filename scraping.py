@@ -3,7 +3,7 @@ import pandas as pd
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-
+import glob
 
 def expo_wait():
     '''
@@ -127,7 +127,7 @@ def scrape_page(webdriver, links, username):
        
         return picture_info
  
-def users_scrape_save(my_username, my_password, users, path, df_columns=['number_of_likes', 'caption']):
+def users_scrape_save(my_username, my_password, users, df_columns=['number_of_likes', 'caption']):
         IGdriver = login(my_username, my_password)
 
         for user in users:
@@ -141,7 +141,7 @@ def users_scrape_save(my_username, my_password, users, path, df_columns=['number
                 user_info = scrape_page(IGdriver, user_links, user)
 
                 df = pd.DataFrame(user_info, columns= df_columns)
-                df.to_csv(path_or_buf= glob.glob(path + '/{}.csv'.format(user)))
+                df.to_csv(path_or_buf= '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}.csv'.format(user))
         return None
 
 
