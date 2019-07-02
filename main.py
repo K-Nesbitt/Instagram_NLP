@@ -4,10 +4,14 @@ from transforming import  csvs_to_df, clean_text
 import pandas as pd 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer 
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 import time
 import emoji
+import numpy as np
 from nltk.probability import FreqDist
 from nltk.tokenize import word_tokenize, punkt
+from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt 
 plt.style.use('fivethirtyeight')
 #%%
@@ -87,17 +91,6 @@ for row in likes_caption_df['caption']:
     else:
         corpus.append(str(' '.join(row)))
 
-Xtrain, Xtext, ytrain, ytest = train_test_split(corpus, likes_caption_df['number_of_likes'])
-#%%
-#Create Tf-dif vectorizer
-vector_tf = TfidfVectorizer(max_df=0.70, min_df= 0.02)
-X = vector_tf.fit_transform(Xtrain)
-popular_words_tf = vector_tf.get_feature_names()
-
-vocab = vector_tf.vocabulary_
-ignored_words = vector_tf.stop_words_
-
-
 #%%
 #Create a second corpus that is by each word
 char_set = ('*', '@', '#','.','?','!',';', ':', '/', '/\/','(', ')', '<', '>', "'", '``')
@@ -107,11 +100,58 @@ for i in range(len(corpus)):
     for j in range(len(words)):
         if words[j] not in char_set:
             corpus_two.append(words[j])
-'''len(corpus_two) = 80273'''
+
 #%%
 #Create a frequency distribution for the words in the corpus_two
 fdist = FreqDist(word for word in corpus_two)    
 fdist.pprint(maxlen=15)
+
+#image shows best in jupyter notebook
+plt.ion()
+fdist.plot(30, title='Frequency of Top 30 Words')
+plt.savefig('images/freq_words.png')
+plt.ioff()
+plt.show()
+
+#%%
+#create a train and test set of data
+X = np.array(corpus)
+y = likes_caption_df['number_of_likes'].values
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
+#%%
+#Create Tf-idf vectorizer
+vector_train = TfidfVectorizer(decode_error = 'replace', max_features=50, min_df= 0.02)
+X_vector = vector_train.fit_transform(Xtrain)
+X_train = X_vector.toarray()
+
+popular_words = vector_train.get_feature_names()
+
+vocab = vector_train.vocabulary_
+ignored_words = vector_train.stop_words_
+#consider adding ignored words to presentation
+#%%
+vector_test = TfidfVectorizer(vocabulary=vocab)
+X_vect = vector_test.fit_transform(Xtest)
+X_test = X_vect.toarray().astype(int)
+
+#%%
+#Random Forest Estimator
+rf = RandomForestRegressor(n_estimators = 100, n_jobs=-1)
+rf.fit(X_train, ytrain)
+print("Random Forest score:", rf.score(X_test, ytest))
+
+
+
+#%%
+lmodel = LinearRegression()
+lmodel.fit(X_train, ytrain)
+
+print('Linear Regression score:', lmodel.score(X_test, yest))
+
+
 #%%
 
 
+#%%
+
+#%%
