@@ -28,9 +28,15 @@ The average number of followers was 708.
 
 The lowest number of followers was 169 and the highest was 2161 (a local musician).
 
-The average number of likes is 31. The most likes was 402. (Again from the musician)
+The average number of likes is 31.
+                    
 ![hist3](https://github.com/K-Nesbitt/Instagram_likes_nlp/blob/master/images/number_of_likes.png)
 
+The most number of likes was 402, again from the local musician. The caption read: 
+
+*"Last day in Iceland. It’s been an amazing 11 days. Got to meet and work with some amazing people, work with an amazing company/brand, and got to play model while being on some epic adventures. I will never forget this trip and I’m looking forward to the next. Iceland, it’s been REAL, real! Shoutout to @jamesharnoisphoto and @hownottotravellikeabasicbitch for extending their stay with me and for these bad ass and mostly basic shots. 😂😂 
+ #iceland #niceland #LITlit #workaction #reykjavik #reiadventures #reishoot #bluelagoon #mountains #inclusivity #beach #hiking #whyhike #optoutside #adventures #travel #europe"*
+                    
 ## Results
 Using sklearn's Tdidf text vectorizer I found the most popular names (term frequency of at least 2%) to be: 
 
