@@ -5,6 +5,8 @@ import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.model_selection import train_test_split
 import time
+import matplotlib.pyplot as plt 
+plt.style.use('fivethirtyeight')
 #%%
 #Open files with my username and password stored
 u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
@@ -68,5 +70,16 @@ df_totals  = pd.DataFrame.from_dict(totals_dict, orient='index', dtype = int, co
 df_totals = df_totals.astype(int)
 df_totals.describe()
 #%%
+fig, ax1 = plt.subplots()
+df_totals.hist(column = 'number_of_posts', ax = ax1, figsize = (8,8), bins = 20, color = 'green')
+plt.savefig('images/number_of_posts.png', facecolor = 'white')
+
+fig, ax2 = plt.subplots()
+df_totals.hist(column = 'number_of_followers', ax = ax2, figsize = (8,8), bins = 20, color= 'purple')
+plt.savefig('images/number_of_followers.png', facecolor = 'white')
 
 
+#%%
+
+
+#%%
