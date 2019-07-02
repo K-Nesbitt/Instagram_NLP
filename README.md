@@ -38,8 +38,9 @@ The most number of likes was 402, again from the local musician. The caption rea
  #iceland #niceland #LITlit #workaction #reykjavik #reiadventures #reishoot #bluelagoon #mountains #inclusivity #beach #hiking #whyhike #optoutside #adventures #travel #europe"*
                     
 ## Results
-The total number of words (or strings since there are emojis and words with emojis) is 81,125.
-Using sklearn's Tdidf text vectorizer I found the most popular names to be:
+The total number of words (or strings since there are emojis and words with emojis) is about 80,000.
+
+Using sklearn's Tf-idf text vectorizer I found the most popular names to be:
 
 **_Top 3%_**
 
@@ -54,6 +55,7 @@ day, get, love, time, today
 
 **_Only word in top 10% (most used word): LOVE_**
 
+![plot1](https://github.com/K-Nesbitt/Instagram_likes_nlp/blob/master/images/frequency_words.png)
 
 
 ## Reflection
