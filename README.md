@@ -3,10 +3,10 @@
 **Goal**: The goal of this project is to discover the relationship between the caption and the number of likes on a picture from Instagram
 
 **Data Collection**: I collected my data by scraping Instagram profiles and recorded the following information:
-          - number of posts
-          - number of followers
-          - number of likes for pictures only
-          - the caption of the photo
+  * number of posts 
+  * number of followers 
+  * number of likes for pictures only 
+  * the caption of the photo 
 
 ## Exploratory Data Analysis
 
@@ -32,9 +32,11 @@ The most number of likes was 402, again from the local musician. The caption rea
 
 *"Last day in Iceland. It’s been an amazing 11 days. Got to meet and work with some amazing people, work with an amazing company/brand, and got to play model while being on some epic adventures. I will never forget this trip and I’m looking forward to the next. Iceland, it’s been REAL, real! Shoutout to @jamesharnoisphoto and @hownottotravellikeabasicbitch for extending their stay with me and for these bad ass and mostly basic shots. 😂😂 
  #iceland #niceland #LITlit #workaction #reykjavik #reiadventures #reishoot #bluelagoon #mountains #inclusivity #beach #hiking #whyhike #optoutside #adventures #travel #europe"*
+
+**Why is there a peak at 5 likes?**
+I set a default in my scraping code and it was obviously an error. 
                     
-                    
-The total number of words (or strings since there are emojis and words with emojis) is about 80,000.
+The total number of "words" are about 76,400.
 
 
 ![plot1](https://github.com/K-Nesbitt/Instagram_likes_nlp/blob/master/images/freq2_plot.png)
@@ -46,36 +48,37 @@ Using sklearn's Tf-idf text vectorizer I found the most popular names to be:
 
 beauti, day, friend, get, go, good, got, great, happi, im, know, life, 
 
-like, **lit**, littl, love, new, night, one, see, thank, time, today, work, year
+like, **lit**, littl, love, make, new, one, see, thank, time, today, work, year
 
 **_Top 5%_**
 
-day, get, love, time, today
+day, love, time, today
 
 
 **_Only word in top 10% (most used word): LOVE_**
 
+I created a vector with a **minimum document frequency of .25%**  which contained **786 words** in the vocabulary set 
+(about 1% of the total words).
+
+There were 10485 ignored words:
+
+          {central, schwinn, aspir, horatio, grandfath, supportthemov, mysong, buongiorno, splash, earn, 
+          weallscreamforicecream, livebig, hermitfal, whoever, accur, recalibr, af, lifetim, catsoutofthebag, 
+          sidelin, munchkin, blacksand, beatbama, californiaadventur, goldenbirthday, bekind, tidbitnippi, 
+          nerdingout, worldtradecent ...}
 
 ## Results
-I set created a Tf-IDF vector with 656 vocabulary words and then used two different models to estimate the number of likes based on words.
+I ran the train and test sets on a Random Forest with 100 trees, and a Linear Regression.
 
-Words that were ignored in the Tf-IDF vector:
-
-
-
-                    Random Forest score: -0.04968729153554263
+                    Random Forest score: -0.07604367797726175
                     
-                    Linear Regression score: 
+                    Linear Regression score: -0.05412067220144978 
 
+I played around with a few parameters but my conclusion is that my data was too sparse, there was errors in my scraping code, there was no correlation between captions and number of likes, and I needed more features in the data set. 
 
 ## Reflection
-There is currently no evidence to support the claim that words are related to the number of likes on Instagram. 
+I plan to continue this project by updating my scraping code to fix the error capturing the actual number of likes and collect the timestamp of the picture. When organizing the data I can add another feature of the total number of followers (still with caution as the number of followers changes over time). I would also like figure out how to separate emoji's and then identify them as tokens as well as address multiple words that are strung together in hashtags. 
 
-Some issues I encounted and were unable to solve in the timeline of my project were:
-- Separating and identifying emoji's
-- Separating combined words from hashtags (ex: thisprojectwasfun)
-- Combining a the number of followers with the number of likes and caption
-
-I would like to collect data on more users outside of Austin and Texas. I would also like to collect data on the timestamp so that I could recommend the best time to post a picture and the words to use to maximize the number of likes. 
+With a new model I could recommend the best time to post a picture and the words to use to maximize the number of likes. 
 
 I realize that the goal of this project can seem superficial but it was really interesting to continue building my webscraping skills, see real world data with something that I use daily, and conduct natural language processing on the information that I found. 
