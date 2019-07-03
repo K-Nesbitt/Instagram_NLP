@@ -138,7 +138,7 @@ X_test = X_vect.todense().astype(int)
 
 #%%
 #Random Forest Regression Model
-rf = RandomForestRegressor(n_estimators = 50, n_jobs=-1)
+rf = RandomForestRegressor(n_estimators = 100, n_jobs=-1)
 rf.fit(X_train, ytrain)
 print("Random Forest score:", rf.score(X_test, ytest))
 
