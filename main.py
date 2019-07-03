@@ -121,7 +121,7 @@ y = likes_caption_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 #%%
 #Create Tf-idf vectorizer
-vector_train = TfidfVectorizer(min_df= 0.003)
+vector_train = TfidfVectorizer(min_df= 0.0025)
 X_vector = vector_train.fit_transform(Xtrain)
 X_train = X_vector.todense()
 
