@@ -96,7 +96,8 @@ for row in likes_caption_df['caption']:
         corpus.append(str(' '.join(row)))
 
 #%%
-#Create a second corpus that is by each word
+#Create a second corpus that is by each word.
+# Removes special characters and emojis
 corpus_two = []
 for i in range(len(corpus)):
     new_string = re.sub('\W+',' ', corpus[i])
