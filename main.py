@@ -15,6 +15,7 @@ import numpy as np
 import time
 import emoji
 import re
+import pprint
 
 import matplotlib.pyplot as plt 
 plt.style.use('fivethirtyeight')
@@ -90,18 +91,15 @@ plt.savefig('images/number_of_followers.png', facecolor = 'white')
 #declare a test and train set from the corpus and target labels
 corpus = []
 for row in likes_caption_df['caption']:
-    if row == []:
-        corpus.append('')
-    else:
-        corpus.append(str(' '.join(row)))
-
+    r_string = str(' '.join(row))
+    clean_string = re.sub('\W+',' ', r_string)
+    corpus.append(clean_string)
 #%%
 #Create a second corpus that is by each word.
 # Removes special characters and emojis
 corpus_two = []
 for i in range(len(corpus)):
-    new_string = re.sub('\W+',' ', corpus[i])
-    words = word_tokenize(new_string)
+    words = word_tokenize(corpus[i])
     for j in range(len(words)):
             corpus_two.append(words[j])
 
@@ -111,11 +109,10 @@ fdist = FreqDist(word for word in corpus_two)
 fdist.pprint(maxlen=15)
 
 #image shows best in jupyter notebook
-plt.ion()
+
 fdist.plot(30, title='Frequency of Top 30 Words')
-plt.savefig('images/freq_words.png')
-plt.ioff()
-plt.show()
+
+
 
 #%%
 #create a train and test set of data
@@ -124,7 +121,7 @@ y = likes_caption_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 #%%
 #Create Tf-idf vectorizer
-vector_train = TfidfVectorizer(min_df= 0.003)
+vector_train = TfidfVectorizer(min_df= 0.0025)
 X_vector = vector_train.fit_transform(Xtrain)
 X_train = X_vector.todense()
 
@@ -157,9 +154,6 @@ print('Linear Regression score:', lmodel.score(X_test, ytest))
 
 
 #%%
-ignored_words
 
-#%%
-corpus_two
 
 #%%
