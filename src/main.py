@@ -1,6 +1,6 @@
 #%% 
-from scraping import login, totals, get_picture_links, scrape_page, users_scrape_save
-from transforming import  csvs_to_df, clean_text
+from src.scraping import login, totals, get_picture_links, scrape_page, users_scrape_save
+from src.transforming import  csvs_to_df, clean_text, create_corpus, tokenize_corpus
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer 
 from sklearn.model_selection import train_test_split
@@ -31,8 +31,11 @@ p.close()
 #%%
 #Get information from my own profile page
 IGdriver = login(my_username, my_password)
+time.sleep(5)
 my_posts , my_followers = totals(IGdriver)
+time.sleep(5)
 p_links = get_picture_links(IGdriver, my_posts)
+time.sleep(3)
 p_info = scrape_page(IGdriver, p_links, my_username)
 
 
@@ -87,25 +90,12 @@ df_totals.hist(column = 'number_of_followers', ax = ax2, figsize = (8,8), bins =
 plt.savefig('images/number_of_followers.png', facecolor = 'white')
 
 #%%
-#Create a corpus from each row in the dataframe
-#declare a test and train set from the corpus and target labels
-corpus = []
-for row in likes_caption_df['caption']:
-    r_string = str(' '.join(row))
-    clean_string = re.sub('\W+',' ', r_string)
-    corpus.append(clean_string)
-#%%
-#Create a second corpus that is by each word.
-# Removes special characters and emojis
-corpus_two = []
-for i in range(len(corpus)):
-    words = word_tokenize(corpus[i])
-    for j in range(len(words)):
-            corpus_two.append(words[j])
+corpus = create_corpus(likes_caption_df)
+word_corpus = tokenize_corpus(corpus)
 
 #%%
 #Create a frequency distribution for the words in the corpus_two
-fdist = FreqDist(word for word in corpus_two)    
+fdist = FreqDist(word for word in word_corpus)    
 fdist.pprint(maxlen=15)
 
 #image shows best in jupyter notebook
@@ -116,7 +106,7 @@ X = np.array(corpus)
 y = likes_caption_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 #%%
-#Create Tf-idf vectorizer
+#Create Tf-idf vectorizer and save feature names, vocabulary set, and ignored words
 vector_train = TfidfVectorizer(min_df= 0.0025)
 X_vector = vector_train.fit_transform(Xtrain)
 X_train = X_vector.todense()
@@ -138,8 +128,7 @@ rf = RandomForestRegressor(n_estimators = 100, n_jobs=-1)
 rf.fit(X_train, ytrain)
 print("Random Forest score:", rf.score(X_test, ytest))
 
-'''With minimum df of 0.003, and 100 trees:
-Random Forest score: -0.04968729153554263'''
+#Record best score: minimum df of 0.003, and 100 trees, rf score: -0.04968729153554263
 
 #%%
 #Linear Regression Model
@@ -149,6 +138,6 @@ print('Linear Regression score:', lmodel.score(X_test, ytest))
 
 
 #%%
-
+len(vocab)
 
 #%%
