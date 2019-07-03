@@ -1,17 +1,21 @@
 #%% 
 from scraping import login, totals, get_picture_links, scrape_page, users_scrape_save
 from transforming import  csvs_to_df, clean_text
-import pandas as pd 
+
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
-import time
-import emoji
-import numpy as np
+
 from nltk.probability import FreqDist
 from nltk.tokenize import word_tokenize, punkt
-from sklearn.metrics import confusion_matrix
+
+import pandas as pd 
+import numpy as np
+import time
+import emoji
+import re
+
 import matplotlib.pyplot as plt 
 plt.style.use('fivethirtyeight')
 #%%
@@ -93,12 +97,11 @@ for row in likes_caption_df['caption']:
 
 #%%
 #Create a second corpus that is by each word
-char_set = ('*', '@', '#','.','?','!',';', ':', '/', '/\/','(', ')', '<', '>', "'", '``')
 corpus_two = []
 for i in range(len(corpus)):
-    words = word_tokenize(corpus[i])
+    new_string = re.sub('\W+',' ', corpus[i])
+    words = word_tokenize(new_string)
     for j in range(len(words)):
-        if words[j] not in char_set:
             corpus_two.append(words[j])
 
 #%%
@@ -120,7 +123,7 @@ y = likes_caption_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 #%%
 #Create Tf-idf vectorizer
-vector_train = TfidfVectorizer(decode_error = 'replace', min_df= 0.003)
+vector_train = TfidfVectorizer(min_df= 0.003)
 X_vector = vector_train.fit_transform(Xtrain)
 X_train = X_vector.todense()
 
@@ -154,5 +157,8 @@ print('Linear Regression score:', lmodel.score(X_test, ytest))
 
 #%%
 ignored_words
+
+#%%
+corpus_two
 
 #%%
