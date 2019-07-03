@@ -121,7 +121,7 @@ y = likes_caption_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 #%%
 #Create Tf-idf vectorizer
-vector_train = TfidfVectorizer(min_df= 0.0025)
+vector_train = TfidfVectorizer(min_df= 0.003)
 X_vector = vector_train.fit_transform(Xtrain)
 X_train = X_vector.todense()
 
@@ -138,7 +138,7 @@ X_test = X_vect.todense().astype(int)
 
 #%%
 #Random Forest Regression Model
-rf = RandomForestRegressor(n_estimators = 100, n_jobs=-1)
+rf = RandomForestRegressor(n_estimators = 50, n_jobs=-1)
 rf.fit(X_train, ytrain)
 print("Random Forest score:", rf.score(X_test, ytest))
 
