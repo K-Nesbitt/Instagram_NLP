@@ -37,7 +37,7 @@ The most number of likes was 402, again from the local musician. The caption rea
 The total number of words (or strings since there are emojis and words with emojis) is about 80,000.
 
 
-![plot1](https://github.com/K-Nesbitt/Instagram_likes_nlp/blob/master/images/frequency_words.png)
+![plot1](https://github.com/K-Nesbitt/Instagram_likes_nlp/blob/master/images/freq2_plot.png)
 
 
 Using sklearn's Tf-idf text vectorizer I found the most popular names to be:
