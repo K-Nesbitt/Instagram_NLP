@@ -109,11 +109,7 @@ fdist = FreqDist(word for word in corpus_two)
 fdist.pprint(maxlen=15)
 
 #image shows best in jupyter notebook
-
 fdist.plot(30, title='Frequency of Top 30 Words')
-
-
-
 #%%
 #create a train and test set of data
 X = np.array(corpus)
@@ -129,7 +125,7 @@ popular_words = vector_train.get_feature_names()
 
 vocab = vector_train.vocabulary_
 ignored_words = vector_train.stop_words_
-#consider adding ignored words to presentation
+
 #%%
 #Create Xtest vector from Xtrain vocabulary
 vector_test = TfidfVectorizer(vocabulary=vocab)
@@ -149,7 +145,6 @@ Random Forest score: -0.04968729153554263'''
 #Linear Regression Model
 lmodel = LinearRegression()
 lmodel.fit(X_train, ytrain)
-
 print('Linear Regression score:', lmodel.score(X_test, ytest))
 
 
