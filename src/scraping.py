@@ -171,9 +171,26 @@ def users_scrape_save(my_username, my_password, users):
         return None
 
 
-'''if __name__ == "__main__":
+if __name__ == "__main__":
         
-'''
+        u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
+        p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
+        my_username = u.read().strip('\n')
+        my_password = p.read().strip('\n')
+        u.close()
+        p.close()
+
+        IGdriver = login(my_username, my_password)
+        time.sleep(5)
+
+        user = 'jacidj'
+        IGdriver.get('https://www.instagram.com/{}/'.format(user))
+        time.sleep(5)
+        
+        pic_links = ['https://www.instagram.com/p/Bb3aKMTHutF3bpL0hQAJU3W2hJnTL96v34YCS40/', 'https://www.instagram.com/p/Bb7R-m0nijOo5hRmN-Yhn6GUhsIKQVUujKpTNw0/']
+        scrape_page(IGdriver, pic_links, user)
+
+
        
 
        

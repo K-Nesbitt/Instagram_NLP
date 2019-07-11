@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .ipynb
 .DS_store
+settings.json
 
 # C extensions
 *.so
