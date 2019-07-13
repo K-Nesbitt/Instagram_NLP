@@ -114,9 +114,9 @@ def scrape_page(webdriver, links, username):
                         likes_list = webdriver.find_elements_by_class_name('zV_Nj')
 
                         if len(likes_list) != 0: #If the length is 0, then it is a video
-                                #!error in data
+                                
                                 if len(likes_list) == 1:
-                                        num_likes = 5
+                                        num_likes = webdriver.find_elements_by_class_name('Nm9Fw')[0].text.split(' ')[0]
                                 
                                 else:
                                         num_likes = int(likes_list[1].text.split(' ')[0]) + 1
@@ -167,7 +167,7 @@ def users_scrape_save(my_username, my_password, users):
                 user_info = scrape_page(IGdriver, user_links, user)
 
                 df = pd.DataFrame(user_info, columns=['number_of_likes', 'caption'])
-                df.to_csv(path_or_buf= '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data/{}.csv'.format(user))
+                df.to_csv(path_or_buf= '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data2/{}.csv'.format(user))
         return None
 
 
@@ -180,15 +180,16 @@ if __name__ == "__main__":
         u.close()
         p.close()
 
-        IGdriver = login(my_username, my_password)
-        time.sleep(5)
+        users= ['adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
+'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8', '_knesbitt', 'mckensiejoo', 'oletheamclachlan',
+'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts', 
+'jeffersonmason4/', 'dmdanamitchell', 'suntanned_superman_', 'laceycooley', 'goulding_jr']
 
-        user = 'jacidj'
-        IGdriver.get('https://www.instagram.com/{}/'.format(user))
-        time.sleep(5)
+        users_scrape_save(my_username, my_password, users)
+
         
-        pic_links = ['https://www.instagram.com/p/Bb3aKMTHutF3bpL0hQAJU3W2hJnTL96v34YCS40/', 'https://www.instagram.com/p/Bb7R-m0nijOo5hRmN-Yhn6GUhsIKQVUujKpTNw0/']
-        scrape_page(IGdriver, pic_links, user)
+
+        
 
 
        
