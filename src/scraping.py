@@ -16,13 +16,8 @@ def login(my_username, my_password):
         The driver object'''
 
         url = 'https://www.instagram.com/accounts/login'
-        chrome_options = Options()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.add_argument("--window-size=1920x1080")
-        chrome_options.add_argument("start-maximised")
-        driver = webdriver.Chrome('/Users/keatra/Galvanize/chromedriver', chrome_options=chrome_options)
+        
+        driver = webdriver.Chrome('/Users/keatra/Galvanize/chromedriver')
         
         #go to instagram login page 
         driver.get(url)
@@ -174,7 +169,7 @@ def users_scrape_save(my_username, my_password, users):
                 user_info = scrape_page(IGdriver, user_links, user)
 
                 df = pd.DataFrame(user_info, columns=['number_of_likes', 'caption'])
-                df.to_csv(path_or_buf= '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data2/{}.csv'.format(user))
+                df.to_csv(path_or_buf= '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2/{}.csv'.format(user))
         return None
 
 
@@ -186,12 +181,6 @@ if __name__ == "__main__":
         my_password = p.read().strip('\n')
         u.close()
         p.close()
-
-        IGdriver = login(my_username, my_password)
-        IGdriver.get('https://www.instagram.com/{}/'.format(my_username))
-        num_po, num_fol = totals(IGdriver)
-        links = get_picture_links(IGdriver, num_po)
-
 
 
         users= ['adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
