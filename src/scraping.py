@@ -3,6 +3,7 @@ import pandas as pd
 import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 
 
 def login(my_username, my_password):
@@ -15,7 +16,13 @@ def login(my_username, my_password):
         The driver object'''
 
         url = 'https://www.instagram.com/accounts/login'
-        driver = webdriver.Chrome('/Users/keatra/Galvanize/chromedriver')
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        chrome_options.add_argument("--window-size=1920x1080")
+        chrome_options.add_argument("start-maximised")
+        driver = webdriver.Chrome('/Users/keatra/Galvanize/chromedriver', chrome_options=chrome_options)
         
         #go to instagram login page 
         driver.get(url)
@@ -29,8 +36,8 @@ def login(my_username, my_password):
         #Login
         driver.find_element_by_xpath("//*[contains(text(), 'Log In')]").click()
         time.sleep(5)
-        driver.find_element_by_xpath("//*[contains(text(), 'Not Now')]").click()
-        time.sleep(3)
+        '''driver.find_element_by_xpath("//*[contains(text(), 'Not Now')]").click()
+        time.sleep(3)'''
         #go to profile page
         driver.find_element_by_css_selector("a[href*='/"+my_username+"/']").click()
         
@@ -179,6 +186,13 @@ if __name__ == "__main__":
         my_password = p.read().strip('\n')
         u.close()
         p.close()
+
+        IGdriver = login(my_username, my_password)
+        IGdriver.get('https://www.instagram.com/{}/'.format(my_username))
+        num_po, num_fol = totals(IGdriver)
+        links = get_picture_links(IGdriver, num_po)
+
+
 
         users= ['adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
 'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8', '_knesbitt', 'mckensiejoo', 'oletheamclachlan',

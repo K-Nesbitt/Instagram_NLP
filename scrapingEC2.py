@@ -2,8 +2,11 @@ import numpy as np
 import pandas as pd 
 import time
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 def login(my_username, my_password):
         '''This function will initiate a webdriver, log into Instagram,
@@ -16,11 +19,13 @@ def login(my_username, my_password):
 
         url = 'https://www.instagram.com/accounts/login'
         chrome_options = Options()
-        chrome_options.add_argument('--headless')
-        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.add_argument("--window-size=1920x1080")
-        chrome_options.add_argument("start-maximised")
+        chrome_options.add_argument("disable-infobars")
+        chrome_options.add_argument("--disable-extensions")
+        chrome_options.add_argument("window-size=1920,1080")
+        chrome_options.add_argument("start-maximized")
         driver = webdriver.Chrome(executable_path='/home/ubuntu/chromedriver_unix', chrome_options=chrome_options)
         
         #go to instagram login page 
