@@ -21,13 +21,13 @@ def login(my_username, my_password):
         url = 'https://www.instagram.com/accounts/login'
         chrome_options = Options()
         chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--no-sandbox")
+        '''chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.add_argument("disable-infobars")
         chrome_options.add_argument("--disable-extensions")
         chrome_options.add_argument("window-size=1920,1080")
-        chrome_options.add_argument("start-maximized")
-        driver = webdriver.Chrome(executable_path='/home/ubuntu/chromedriver_unix', chrome_options=chrome_options)
+        chrome_options.add_argument("start-maximized")'''
+        driver = webdriver.Chrome(executable_path='/home/ubuntu/chromedriver_unix', options=chrome_options)
         
         #go to instagram login page 
         driver.get(url)
@@ -94,7 +94,7 @@ def get_picture_links(webdriver, total_posts):
                         
                 html.send_keys(Keys.END)
                 time.sleep(7)
-        print('The total number of picture links are: {}'.format(len(link_set)))
+        
         return link_set
 
 def scrape_page(webdriver, links, username):
@@ -182,7 +182,7 @@ def users_scrape_save(my_username, my_password, users):
                 user_info = scrape_page(IGdriver, user_links, user)
 
                 df = pd.DataFrame(user_info, columns=['number_of_likes', 'caption'])
-                df.to_csv(path_or_buf= '/home/ubuntu/insta/data_2/{}.csv'.format(user))
+                df.to_csv(path_or_buf= '/home/ubuntu/insta/data/{}.csv'.format(user))
         return None
 
 
@@ -195,7 +195,7 @@ if __name__ == "__main__":
         u.close()
         p.close()
 
-        users= ['adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
+        users= ['briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
 'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8', '_knesbitt', 'mckensiejoo', 'oletheamclachlan',
 'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts', 
 'jeffersonmason4/', 'dmdanamitchell', 'suntanned_superman_', 'laceycooley', 'goulding_jr']
