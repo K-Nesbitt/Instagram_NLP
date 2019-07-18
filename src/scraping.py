@@ -16,8 +16,9 @@ def login(my_username, my_password):
         The driver object'''
 
         url = 'https://www.instagram.com/accounts/login'
-        
-        driver = webdriver.Chrome('/Users/keatra/Galvanize/chromedriver')
+        chromeOptions = Options()
+        chromeOptions.add_argument('--headless')
+        driver = webdriver.Chrome('/Users/keatra/Galvanize/chromedriver', options=chromeOptions)
         
         #go to instagram login page 
         driver.get(url)
@@ -159,9 +160,9 @@ def users_scrape_save(my_username, my_password, users):
         IGdriver = login(my_username, my_password)
 
         for user in users:
-                time.sleep(5)
+                time.sleep(8)
                 IGdriver.get('https://www.instagram.com/{}/'.format(user))
-                time.sleep(5)
+                time.sleep(10)
                 user_posts, user_followers = totals(IGdriver)
                 time.sleep(3)
                 user_links = get_picture_links(IGdriver, user_posts)
@@ -183,7 +184,7 @@ if __name__ == "__main__":
         p.close()
 
 
-        users= ['adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
+        users= ['blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
 'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8', '_knesbitt', 'mckensiejoo', 'oletheamclachlan',
 'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts', 
 'jeffersonmason4/', 'dmdanamitchell', 'suntanned_superman_', 'laceycooley', 'goulding_jr']
