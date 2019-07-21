@@ -184,14 +184,14 @@ if __name__ == "__main__":
         p.close()
 
 
-        users= ['_knesbitt', 'mckensiejoo', 'oletheamclachlan',
-'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts', 
-'jeffersonmason4/', 'dmdanamitchell', 'suntanned_superman_', 'laceycooley', 'goulding_jr']
+        users= [ 'jeffersonmason4', 'dmdanamitchell', 'suntanned_superman_', 'laceycooley', 'goulding_jr']
 
         users_scrape_save(my_username, my_password, users)
 
         '''past users: 'adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
-'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8','''
+'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8','_knesbitt', 'mckensiejoo', 'oletheamclachlan',
+'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 'pina.risa', 
+'presmith', 'giftedhands_crochet_and_crafts','''
 
         
 
