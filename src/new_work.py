@@ -1,5 +1,5 @@
 #%%
-from src.transforming import  csvs_to_df, clean_text, create_corpus, tokenize_corpus
+from src.transforming import  csvs_to_df, clean_text, create_corpus, tokenize_corpus, add_word_count
 from src.scraping import user_totals
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer 
 from sklearn.model_selection import train_test_split
@@ -18,7 +18,6 @@ import holoviews as hv
 
 hv.extension('bokeh')
 
-#%%
 #%%
 #combine csvs to a dataframe
 data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2'
@@ -68,8 +67,12 @@ likes_caption_df  = clean_text(df_raw)
 likes_caption_df.head()
 
 #%%
+full_df = add_word_count(likes_caption_df)
+full_df.head()
+
+#%%
 #Create a corpus from the rows in a dataframe
-corpus = create_corpus(likes_caption_df)
+corpus = create_corpus(full_df)
 word_corpus = tokenize_corpus(corpus)
 print('There are a total of {} words in the corpus'.format(len(word_corpus)))
 
@@ -83,15 +86,16 @@ frequency = hv.Scatter(sorted_words[-10:])
 frequency.opts(size=7, xlabel='word', ylabel='Number of Times in Corpus')
 #%%
 #create a train and test set of data
-X = np.array(corpus)
-y = likes_caption_df['number_of_likes'].values
+X = pd.DataFrame({'caption':np.array(corpus), 'num_words': full_df['number_of_words'].values})
+y = full_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 
 #%%
 #Create Tf-idf vectorizer and save feature names, vocabulary set, and ignored words
 vector_train = TfidfVectorizer(min_df= 0.00017)
-X_vector = vector_train.fit_transform(Xtrain)
-X_train = X_vector.todense()
+X_vector = vector_train.fit_transform(Xtrain['caption'])
+X_train = np.array(X_vector.todense())
+x_full_train = np.concatenate((X_train, Xtrain['num_words'].values.reshape(-1,1)), axis=1)
 
 popular_words = vector_train.get_feature_names()
 
@@ -101,13 +105,14 @@ ignored_words = vector_train.stop_words_
 #%%
 #Create Xtest vector from Xtrain vocabulary
 vector_test = TfidfVectorizer(vocabulary=vocab)
-X_vect = vector_test.fit_transform(Xtest)
+X_vect = vector_test.fit_transform(Xtest['caption'])
 X_test = X_vect.todense().astype(int)
+x_full_test = np.concatenate((X_test, Xtest['num_words'].values.reshape(-1,1)), axis=1)
 
 #%%
 #Random Forest Regression Model
 rf = RandomForestRegressor(n_estimators = 10, max_features=0.33, n_jobs=-1)
-rf.fit(X_train, ytrain)
-print("Random Forest score:", rf.score(X_test, ytest))
+rf.fit(x_full_train, ytrain)
+print("Random Forest score:", rf.score(x_full_test, ytest))
 
 #%%
