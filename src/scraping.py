@@ -196,8 +196,7 @@ def user_totals(names):
 
     # Create dataframe with information for user by row
     df_totals  = pd.DataFrame.from_dict(totals_dict, orient='index', dtype = int, columns = ['number_of_posts', 'number_of_followers'])
-    df_totals = df_totals.astype(int)
-
+    
     return df_totals
 
 
