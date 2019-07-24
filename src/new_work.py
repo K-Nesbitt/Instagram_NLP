@@ -27,7 +27,7 @@ df_raw.head()
 #%%
 #Plot the number of likes on a histogram
 num_likes = hv.Histogram(np.histogram(df_raw['number_of_likes'], 250))
-num_likes.opts(xlabel='Number of Likes per photo', xticks=10)
+num_likes.opts(xlabel='Number of Likes', xticks=10)
 num_likes.redim(x=hv.Dimension('x', range=(0, 200)))
 
 
@@ -80,7 +80,7 @@ sorted_words = sorted(words.items(), key=operator.itemgetter(1))
 
 #%%
 frequency = hv.Scatter(sorted_words[-10:])
-frequency.opts(size=7, xlabel='word', ylabel='Number of Times in Corpus')
+frequency.opts(size=7, title='Word Frequency', xlabel='Word', ylabel='Number of Times in Corpus')
 #%%
 #create a train and test set of data
 X = pd.DataFrame({'caption':np.array(corpus), 'num_words': full_df['number_of_words'].values})
@@ -113,3 +113,19 @@ rf.fit(x_full_train, ytrain)
 print("Random Forest score:", rf.score(x_full_test, ytest))
 
 #n_estimators = 10, max_features=0.33 = score -0.48
+
+#%%
+#Graph relationship between number of likes and number of words
+likes = full_df['number_of_likes'].values
+words = full_df['number_of_words'].values
+
+words_likes = hv.Scatter((words, likes)).opts(xlabel='Number of words in caption', ylabel='Number of likes',title='Words vs. Likes')
+words_likes.redim(x=hv.Dimension('x', range=(0, 100)), y=hv.Dimension('y', range=(0,100)))
+#%%
+#Linear Regression Model
+linear = LinearRegression()
+linear.fit(x_full_train, ytrain)
+print("Linear Regression score:", linear.score(x_full_test, ytest))
+
+
+#%%
