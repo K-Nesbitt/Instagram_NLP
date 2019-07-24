@@ -23,6 +23,7 @@ def csvs_to_df(path):
         df_from_each_file = (pd.read_csv(f, usecols=[1,2]) for f in all_files)
         
         concatenated_df  = pd.concat(df_from_each_file, ignore_index=False)
+        concatenated_df['number_of_likes'] = concatenated_df['number_of_likes'].apply(lambda x: x.replace(',', '') if type(x)==str else x)
         concatenated_df['number_of_likes'] = concatenated_df['number_of_likes'].astype(int)
         concatenated_df['caption'] = concatenated_df['caption'].astype(str)
         
