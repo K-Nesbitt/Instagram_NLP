@@ -76,9 +76,38 @@ print('There are a total of {} words in the corpus'.format(len(word_corpus)))
 #%%
 #Create a frequency distribution for word_corpus
 words = Counter(word_corpus)
-sorted_words = sorted(words.items(), key=operator.itemgetter(0))
+sorted_words = sorted(words.items(), key=operator.itemgetter(1))
 
 #%%
+frequency = hv.Scatter(sorted_words[-10:])
+frequency.opts(size=7, xlabel='word', ylabel='Number of Times in Corpus')
+#%%
+#create a train and test set of data
+X = np.array(corpus)
+y = likes_caption_df['number_of_likes'].values
+Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 
+#%%
+#Create Tf-idf vectorizer and save feature names, vocabulary set, and ignored words
+vector_train = TfidfVectorizer(min_df= 0.00017)
+X_vector = vector_train.fit_transform(Xtrain)
+X_train = X_vector.todense()
+
+popular_words = vector_train.get_feature_names()
+
+vocab = vector_train.vocabulary_
+ignored_words = vector_train.stop_words_
+
+#%%
+#Create Xtest vector from Xtrain vocabulary
+vector_test = TfidfVectorizer(vocabulary=vocab)
+X_vect = vector_test.fit_transform(Xtest)
+X_test = X_vect.todense().astype(int)
+
+#%%
+#Random Forest Regression Model
+rf = RandomForestRegressor(n_estimators = 10, max_features=0.33, n_jobs=-1)
+rf.fit(X_train, ytrain)
+print("Random Forest score:", rf.score(X_test, ytest))
 
 #%%
