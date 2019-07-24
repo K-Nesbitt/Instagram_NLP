@@ -37,3 +37,37 @@ users= [ 'adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 
                 'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts','jeffersonmason4', 'dmdanamitchell', 
                 'suntanned_superman_', 'laceycooley', 'goulding_jr']
 user_totals = user_totals(users)
+#%%
+user_totals['number_of_followers'] = user_totals['number_of_followers'].apply(lambda x: x.replace('.', '') if type(x)==str else x)
+user_totals['number_of_followers'] = user_totals['number_of_followers'].apply(lambda x: x.replace('k', '000') if type(x)==str else x)
+user_totals['number_of_followers']= user_totals['number_of_followers'].astype(int)
+user_totals.describe()
+
+#%%
+drop_high_users = user_totals.drop(labels=['jeffersonmason4', 'dmdanamitchell'])
+drop_high_users.describe()
+#%%
+#Plot the number of posts
+num_posts = hv.Histogram(np.histogram(user_totals['number_of_posts'], 50))
+num_posts.opts(xlabel='Number of Posts per User', xticks=10)
+num_posts.redim(x=hv.Dimension('x', range=(0, 1500)))
+
+
+#%%
+#Plot the number of followers
+num_followers = hv.Histogram(np.histogram(drop_high_users['number_of_followers'], 250))
+num_followers.opts(xlabel='Number of Followers per User', xticks=50)
+num_followers.redim(x=hv.Dimension('x', range=(0, 2000)))
+
+#%%
+#This function will lowercase and remove special characters from the caption 
+likes_caption_df  = clean_text(df_raw)
+likes_caption_df.head()
+
+#%%
+#Create a corpus from the rows in a dataframe
+corpus = create_corpus(likes_caption_df)
+word_corpus = tokenize_corpus(corpus)
+
+
+#Create a frequency distribution for word_corpus
