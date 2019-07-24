@@ -11,6 +11,8 @@ from nltk.tokenize import word_tokenize, punkt
 
 import pandas as pd 
 import numpy as np
+from collections import Counter
+import operator
 
 import holoviews as hv 
 
@@ -50,14 +52,15 @@ drop_high_users.describe()
 #Plot the number of posts
 num_posts = hv.Histogram(np.histogram(user_totals['number_of_posts'], 50))
 num_posts.opts(xlabel='Number of Posts per User', xticks=10)
-num_posts.redim(x=hv.Dimension('x', range=(0, 1500)))
+num_posts.redim(x=hv.Dimension('x', range=(0, 800)))
+num_posts.redim(y=hv.Dimension('y', range=(0, 4)))
 
 
 #%%
 #Plot the number of followers
-num_followers = hv.Histogram(np.histogram(drop_high_users['number_of_followers'], 250))
-num_followers.opts(xlabel='Number of Followers per User', xticks=50)
-num_followers.redim(x=hv.Dimension('x', range=(0, 2000)))
+num_followers = hv.Histogram(np.histogram(drop_high_users['number_of_followers'], 50))
+num_followers.opts(xlabel='Number of Followers per User', xticks=5)
+num_followers.redim(x=hv.Dimension('x', range=(0, 1200)))
 
 #%%
 #This function will lowercase and remove special characters from the caption 
@@ -68,6 +71,14 @@ likes_caption_df.head()
 #Create a corpus from the rows in a dataframe
 corpus = create_corpus(likes_caption_df)
 word_corpus = tokenize_corpus(corpus)
+print('There are a total of {} words in the corpus'.format(len(word_corpus)))
 
-
+#%%
 #Create a frequency distribution for word_corpus
+words = Counter(word_corpus)
+sorted_words = sorted(words.items(), key=operator.itemgetter(0))
+
+#%%
+
+
+#%%

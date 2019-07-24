@@ -48,7 +48,7 @@ def clean_text(df):
         df['caption'] = df['caption'].map(lambda row: 
                         rgx.sub('', row), na_action = 'ignore')
 
-        '''#stem and remove stopwords
+        #stem and remove stopwords
         port = PorterStemmer()
         s_stop = set(stopwords.words('english'))
         df['caption'] = df['caption'].apply(lambda row: 
@@ -56,7 +56,7 @@ def clean_text(df):
 
         #tokenize the words
         df['caption'] = df['caption'].apply(lambda row: word_tokenize(' '.join(row)))
-'''
+
         return df
 
 def create_corpus(df, column= 'caption'):
