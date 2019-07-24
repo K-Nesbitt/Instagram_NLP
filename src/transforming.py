@@ -59,6 +59,10 @@ def clean_text(df):
 
         return df
 
+def add_word_count(df):
+	df['number_of_words'] = df['caption'].apply(lambda x: len(x))
+	return df
+
 def create_corpus(df, column= 'caption'):
         '''Create a corpus from each row in the dataframe to use
         on train and test sets.
