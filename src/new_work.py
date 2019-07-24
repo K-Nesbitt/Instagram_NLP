@@ -64,9 +64,6 @@ num_followers.redim(x=hv.Dimension('x', range=(0, 1200)))
 #%%
 #This function will lowercase and remove special characters from the caption 
 likes_caption_df  = clean_text(df_raw)
-likes_caption_df.head()
-
-#%%
 full_df = add_word_count(likes_caption_df)
 full_df.head()
 
@@ -115,4 +112,4 @@ rf = RandomForestRegressor(n_estimators = 10, max_features=0.33, n_jobs=-1)
 rf.fit(x_full_train, ytrain)
 print("Random Forest score:", rf.score(x_full_test, ytest))
 
-#%%
+#n_estimators = 10, max_features=0.33 = score -0.48
