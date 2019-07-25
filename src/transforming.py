@@ -22,7 +22,7 @@ def csvs_to_df(path):
         all_files = glob.glob(path + '/*.csv')
         for f in all_files:
             df = pd.read_csv(f, usecols=[1,2])
-            df['user'] = f.replace(path, '').strip('/').strip('.csv')
+            df['user'] = f.replace(path, '').strip('/')[:-4]
             concat_df  = pd.concat([concat_df,df], ignore_index=False)
        
         concat_df['number_of_likes'] = concat_df['number_of_likes'].apply(lambda x: x.replace(',', '') if type(x)==str else x)
