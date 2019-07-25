@@ -33,9 +33,10 @@ user_totals = user_totals(users)
 
 #%%
 #Join df with features and user totals
-full_df = likes_caption_user.join(user_totals, on='user')
+user_totals = pd.read_csv('./user_totals.csv', header=0, names = ['user', 'user_posts', 'user_followers'])
+full_df = likes_caption_user.merge(user_totals, on='user')
 
-full_df.to_csv('/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2/all_info.csv')
+#full_df.to_csv('/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2/all_info.csv')
 #%%
 #Graph a histogram of the  number of likes 
 num_likes = hv.Histogram(np.histogram(df_raw['number_of_likes'], 250))
@@ -85,8 +86,9 @@ sorted_words = sorted(words.items(), key=operator.itemgetter(1))
 frequency = hv.Scatter(sorted_words[-10:])
 frequency.opts(size=7, title='Word Frequency', xlabel='Word', ylabel='Number of Times in Corpus')
 #%%
-#create a train and test set of data (corpus of words and number of words)
-X = pd.DataFrame({'caption':np.array(corpus), 'num_words': full_df['number_of_words'].values})
+#create a train and test set of data
+combine = np.concatenate((np.array(corpus).reshape(-1,1), full_df.iloc[:, 2:].values), axis=1) 
+X = pd.DataFrame(X, columns= ['caption', 'user', 'num_words', 'num_posts', 'num_followers'])
 y = full_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 
@@ -96,7 +98,7 @@ Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 vector_train = TfidfVectorizer(min_df= 0.00017)
 X_vector = vector_train.fit_transform(Xtrain['caption'])
 X_train = np.array(X_vector.todense())
-x_full_train = np.concatenate((X_train, Xtrain['num_words'].values.reshape(-1,1)), axis=1)
+#x_full_train = np.concatenate((X_train, Xtrain['num_words'].values.reshape(-1,1)), axis=1)
 
 vocab = vector_train.vocabulary_
 ignored_words = vector_train.stop_words_
