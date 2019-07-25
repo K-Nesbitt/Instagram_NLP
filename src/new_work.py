@@ -1,36 +1,39 @@
 #%%
-from src.transforming import  csvs_to_df, clean_text, create_corpus, tokenize_corpus, add_word_count
+from src.transforming import  create_full_df, create_corpus, tokenize_corpus,
 from src.scraping import user_totals
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer 
+from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.linear_model import LinearRegression
 
-from nltk.probability import FreqDist
 from nltk.tokenize import word_tokenize, punkt
 
 import pandas as pd 
 import numpy as np
 from collections import Counter
 import operator
-import glob
-
 import holoviews as hv 
 
 hv.extension('bokeh')
 
 #%%
-#combine csvs to a dataframe
+#Combine all csvs to a dataframe with all features: likes, caption, user
 data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2'
-df_raw = csvs_to_df(data_path)
-df_raw.head()
+likes_caption_user = create_full_df(data_path)
+likes_caption_user.head()
+
 
 #%%
-#Turn caption column into list of tokenized words
-#Add column to count number of words in caption
-likes_caption_df  = clean_text(df_raw)
-full_df = add_word_count(likes_caption_df)
-full_df.head()
+#Collect the total post and number of likes for each user. 
+users= [ 'adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
+                'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8','_knesbitt', 'mckensiejoo', 
+                'oletheamclachlan', 'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 
+                'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts','jeffersonmason4', 'dmdanamitchell', 
+                'suntanned_superman_', 'laceycooley', 'goulding_jr']
+user_totals = user_totals(users)
+user_totals.describe()
+
+#%%
+#Join df with features and user totals
 
 #%%
 #Graph a histogram of the  number of likes 
@@ -50,19 +53,6 @@ words_likes.redim(x=hv.Dimension('x', range=(0, 100)), y=hv.Dimension('y', range
 #Graph a histogram of the number of words per document
 hv.Histogram(np.histogram(full_df['number_of_words'].values)).opts(xlabel='Number of Words in caption')
 
-#%%
-#Collect the total post and number of likes for each user. 
-users= [ 'adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
-                'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8','_knesbitt', 'mckensiejoo', 
-                'oletheamclachlan', 'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 
-                'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts','jeffersonmason4', 'dmdanamitchell', 
-                'suntanned_superman_', 'laceycooley', 'goulding_jr']
-user_totals = user_totals(users)
-
-user_totals['number_of_followers'] = user_totals['number_of_followers'].apply(lambda x: x.replace('.', '') if type(x)==str else x)
-user_totals['number_of_followers'] = user_totals['number_of_followers'].apply(lambda x: x.replace('k', '000') if type(x)==str else x)
-user_totals['number_of_followers']= user_totals['number_of_followers'].astype(int)
-user_totals.describe()
 
 #%%
 drop_high_users = user_totals.drop(labels=['jeffersonmason4', 'dmdanamitchell'])

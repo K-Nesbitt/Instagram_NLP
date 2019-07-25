@@ -174,30 +174,35 @@ def users_scrape_save(my_username, my_password, users):
         return None
 
 
-def user_totals(names):
-    #Read in username and password from file
-    u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
-    p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
-    my_username = u.read().strip('\n')
-    my_password = p.read().strip('\n')
-    u.close()
-    p.close()
+def user_totals(names, df):
+	#Read in username and password from file
+	u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
+	p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
+	my_username = u.read().strip('\n')
+	my_password = p.read().strip('\n')
+	u.close()
+	p.close()
 
-    #Collect data on each person's total posts and followers. 
+	#Collect data on each person's total posts and followers. 
+	df['user_posts'] = ''
+	df['user_followers'] = ''
 
-    totals_dict = {} 
-    driver = login(my_username, my_password)
-    for name in names:
-        driver.get('https://www.instagram.com/{}/'.format(name))
-        time.sleep(8)
-        total_posts , total_followers  = totals(driver)
-        totals_dict[name] = [total_posts.split(' ')[0].replace(',', ''), total_followers.split(' ')[0].replace(',', '')]
-    driver.close()
+	driver = login(my_username, my_password)
+	for name in names:
+		driver.get('https://www.instagram.com/{}/'.format(name))
+		time.sleep(8)
+		total_posts , total_followers  = totals(driver)
+		df[df['user']==name]['user_posts'] = total_posts
+		df[df['user']==name]['user_followers'] = total_followers
+		
+	driver.close()
+	df.to_csv(path_or_buf = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/temp.csv')
+	
+	df['user_followers'] = df['user_followers'].apply(lambda x: x.replace('.', '') if type(x)==str else x)
+	df['user_followers'] = df['user_followers'].apply(lambda x: x.replace('k', '000') if type(x)==str else x)
+	df['user_followers']= df['user_followers'].astype(int)
 
-    # Create dataframe with information for user by row
-    df_totals  = pd.DataFrame.from_dict(totals_dict, orient='index', dtype = int, columns = ['number_of_posts', 'number_of_followers'])
-    
-    return df_totals
+	return df
 
 
 if __name__ == "__main__":
