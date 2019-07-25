@@ -32,11 +32,9 @@ users= [ 'adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 
 user_totals = user_totals(users)
 user_totals.describe()
 
-#%%
 #Join df with features and user totals
 full_df = likes_caption_user.join(user_totals, on='user')
 
-#%%
 full_df.to_csv('/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2/all_info.csv')
 #%%
 #Graph a histogram of the  number of likes 
