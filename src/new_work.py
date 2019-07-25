@@ -56,10 +56,6 @@ hv.Histogram(np.histogram(full_df['number_of_words'].values)).opts(xlabel='Numbe
 
 
 #%%
-drop_high_users = user_totals.drop(labels=['jeffersonmason4', 'dmdanamitchell'])
-drop_high_users.describe()
-
-#%%
 #Plot the number of posts
 num_posts = hv.Histogram(np.histogram(user_totals['number_of_posts'], 50))
 num_posts.opts(xlabel='Number of Posts per User', xticks=10)

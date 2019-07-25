@@ -197,7 +197,7 @@ def user_totals(names):
 	df_totals  = pd.DataFrame.from_dict(totals_dict, orient='index', dtype = int, columns = ['user_posts', 'user_followers'])
 	
 	df_totals['user_followers'] = df_totals['user_followers'].apply(lambda x: x.replace('.', '') if type(x)==str else x)
-	df_totals['user_followers'] = df_totals['user_followers'].apply(lambda x: x.replace('k', '000') if type(x)==str else x)
+	df_totals['user_followers'] = df_totals['user_followers'].apply(lambda x: x.replace('k', '00') if type(x)==str else x)
 	df_totals['user_followers']= df_totals['user_followers'].astype(int)
 	df_totals['user_posts']= df_totals['user_posts'].astype(int)
 
