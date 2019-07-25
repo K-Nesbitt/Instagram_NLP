@@ -174,7 +174,7 @@ def users_scrape_save(my_username, my_password, users):
         return None
 
 
-def user_totals(names, df):
+def user_totals(names):
 	#Read in username and password from file
 	u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
 	p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
@@ -184,25 +184,23 @@ def user_totals(names, df):
 	p.close()
 
 	#Collect data on each person's total posts and followers. 
-	df['user_posts'] = ''
-	df['user_followers'] = ''
-
+	
+	totals_dict = {}
 	driver = login(my_username, my_password)
 	for name in names:
 		driver.get('https://www.instagram.com/{}/'.format(name))
 		time.sleep(8)
 		total_posts , total_followers  = totals(driver)
-		df[df['user']==name]['user_posts'] = total_posts
-		df[df['user']==name]['user_followers'] = total_followers
+		totals_dict[name] = [total_posts.split(' ')[0].replace(',', ''), total_followers.split(' ')[0].replace(',', '')]
 		
 	driver.close()
-	df.to_csv(path_or_buf = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/temp.csv')
+	df_totals  = pd.DataFrame.from_dict(totals_dict, orient='index', dtype = int, columns = ['user_posts', 'user_followers'])
 	
-	df['user_followers'] = df['user_followers'].apply(lambda x: x.replace('.', '') if type(x)==str else x)
-	df['user_followers'] = df['user_followers'].apply(lambda x: x.replace('k', '000') if type(x)==str else x)
-	df['user_followers']= df['user_followers'].astype(int)
+	df_totals['user_followers'] = df_totals['user_followers'].apply(lambda x: x.replace('.', '') if type(x)==str else x)
+	df_totals['user_followers'] = df_totals['user_followers'].apply(lambda x: x.replace('k', '000') if type(x)==str else x)
+	df_totals['user_followers']= df_totals['user_followers'].astype(int)
 
-	return df
+	return df_totals
 
 
 if __name__ == "__main__":
