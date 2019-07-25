@@ -1,5 +1,5 @@
 #%%
-from src.transforming import  create_full_df, create_corpus, tokenize_corpus,
+from src.transforming import create_full_df, create_corpus, tokenize_corpus
 from src.scraping import user_totals
 from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.model_selection import train_test_split
@@ -34,7 +34,10 @@ user_totals.describe()
 
 #%%
 #Join df with features and user totals
+full_df = likes_caption_user.join(user_totals, on='user')
 
+#%%
+full_df.to_csv('/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2/all_info.csv')
 #%%
 #Graph a histogram of the  number of likes 
 num_likes = hv.Histogram(np.histogram(df_raw['number_of_likes'], 250))
