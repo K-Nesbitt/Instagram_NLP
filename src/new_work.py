@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 from collections import Counter
 import operator
+import glob
 
 import holoviews as hv 
 
@@ -127,3 +128,5 @@ rf.fit(x_full_train, ytrain)
 print("Random Forest score:", rf.score(x_full_test, ytest))
 
 #n_estimators = 10, max_features=0.33 = score -0.48
+
+#%%
