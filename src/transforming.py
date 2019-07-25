@@ -54,15 +54,15 @@ def clean_text(df):
         port = PorterStemmer()
         s_stop = set(stopwords.words('english'))
         df['caption'] = df['caption'].apply(lambda row: 
-                                [port.stem(word) for word in row.split() if word not in s_stop])
+                                " ".join([port.stem(word) for word in row.split() if word not in s_stop]))
 
         #tokenize the words
-        df['caption'] = df['caption'].apply(lambda row: word_tokenize(' '.join(row)))
+        #df['caption'] = df['caption'].apply(lambda row: word_tokenize(' '.join(row)))
 
         return df
 
 def add_word_count(df):
-	df['number_of_words'] = df['caption'].apply(lambda x: len(x))
+	df['number_of_words'] = df['caption'].apply(lambda x: len(x.split()))
 	return df
 
 def create_full_df(path):
