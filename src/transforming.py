@@ -17,17 +17,19 @@ def csvs_to_df(path):
 
         Returns: the combined dataframe. '''
 
+        concat_df = pd.DataFrame()
+
         all_files = glob.glob(path + '/*.csv')
+        for f in all_files:
+            df = pd.read_csv(f, usecols=[1,2])
+            df['user'] = f.replace(path, '').strip('/').strip('.csv')
+            concat_df  = pd.concat([concat_df,df], ignore_index=False)
+       
+        concat_df['number_of_likes'] = concat_df['number_of_likes'].apply(lambda x: x.replace(',', '') if type(x)==str else x)
+        concat_df['number_of_likes'] = concat_df['number_of_likes'].astype(int)
+        concat_df['caption'] = concat_df['caption'].astype(str)
         
-        #Since each csv has an index column, I specificy to only use columns 1 and 2
-        df_from_each_file = (pd.read_csv(f, usecols=[1,2]) for f in all_files)
-        
-        concatenated_df  = pd.concat(df_from_each_file, ignore_index=False)
-        concatenated_df['number_of_likes'] = concatenated_df['number_of_likes'].apply(lambda x: x.replace(',', '') if type(x)==str else x)
-        concatenated_df['number_of_likes'] = concatenated_df['number_of_likes'].astype(int)
-        concatenated_df['caption'] = concatenated_df['caption'].astype(str)
-        
-        return concatenated_df
+        return concat_df
 
 def clean_text(df):
         '''This function will transform the caption text to lowercase all words,
@@ -62,6 +64,12 @@ def clean_text(df):
 def add_word_count(df):
 	df['number_of_words'] = df['caption'].apply(lambda x: len(x))
 	return df
+
+def create_full_df(path):
+        df = csvs_to_df(path)
+        df = clean_text(df)
+        df = add_word_count(df)
+        return df
 
 def create_corpus(df, column= 'caption'):
         '''Create a corpus from each row in the dataframe to use
