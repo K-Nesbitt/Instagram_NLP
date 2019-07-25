@@ -1,5 +1,5 @@
 #%%
-from src.transforming import create_full_df, create_corpus, tokenize_corpus
+from src.transforming import csvs_to_df, clean_text, add_word_count, create_full_df, create_corpus, tokenize_corpus
 from src.scraping import user_totals
 from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.model_selection import train_test_split
@@ -18,25 +18,20 @@ hv.extension('bokeh')
 #%%
 #Combine all csvs to a dataframe with all features: likes, caption, user
 data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2'
+test = csvs_to_df(data_path)
+test = clean_text(test)
+
+#%%
 likes_caption_user = create_full_df(data_path)
 likes_caption_user.head()
 
 
 #%%
-#Collect the total post and number of likes for each user. 
-users= [ 'adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 'copperhead_etx', 'faithandfuel',
-                'fitness_with_mercy', 'fresco5280', 'happy_hollydays_', 'jhousesrt8','_knesbitt', 'mckensiejoo', 
-                'oletheamclachlan', 'phensworld', 'richardrobinsonmusic', 'sirlawrencecharles', 'keilam7', 'dr_kerrie', 
-                'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts','jeffersonmason4', 'dmdanamitchell', 
-                'suntanned_superman_', 'laceycooley', 'goulding_jr']
-user_totals = user_totals(users)
-
-#%%
-#Join df with features and user totals
+#Join datafrae with features and user totals
 user_totals = pd.read_csv('./user_totals.csv', header=0, names = ['user', 'user_posts', 'user_followers'])
-full_df = likes_caption_user.merge(user_totals, on='user')
+full_df = test.merge(user_totals, on='user')
 
-#full_df.to_csv('/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2/all_info.csv')
+
 #%%
 #Graph a histogram of the  number of likes 
 num_likes = hv.Histogram(np.histogram(df_raw['number_of_likes'], 250))
@@ -72,6 +67,9 @@ num_followers.redim(x=hv.Dimension('x', range=(0, 1200)))
 
 #%%
 #Create a corpus from the rows in a dataframe
+full_df = pd.read_csv('./all_info.csv', index_col=0)
+
+#%%
 corpus = create_corpus(full_df)
 word_corpus = tokenize_corpus(corpus)
 print('There are a total of {} words in the corpus'.format(len(word_corpus)))
@@ -87,8 +85,8 @@ frequency = hv.Scatter(sorted_words[-10:])
 frequency.opts(size=7, title='Word Frequency', xlabel='Word', ylabel='Number of Times in Corpus')
 #%%
 #create a train and test set of data
-combine = np.concatenate((np.array(corpus).reshape(-1,1), full_df.iloc[:, 2:].values), axis=1) 
-X = pd.DataFrame(X, columns= ['caption', 'user', 'num_words', 'num_posts', 'num_followers'])
+#combine = np.concatenate((np.array(corpus).reshape(-1,1), full_df.iloc[:, 2:].values), axis=1) 
+X = full_df.iloc[:,1:]
 y = full_df['number_of_likes'].values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 

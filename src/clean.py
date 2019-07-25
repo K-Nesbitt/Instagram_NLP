@@ -20,10 +20,12 @@ df.head()
 #%%
 #Join dataframe with features and user totals
 totals = pd.read_csv('./user_totals.csv', header=0, names = ['user', 'user_posts', 'user_followers'])
-complete_df = df.merge(totals, on='user')
+complete_df = df.merge(totals, how = 'left', on='user')
 
 
 #%%
+
+
 
 
 #%%
