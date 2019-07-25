@@ -30,8 +30,8 @@ users= [ 'adizz82', 'blake.kelch', 'briannanmoore13', 'caseybarnold', 'cclay2', 
                 'pina.risa', 'presmith', 'giftedhands_crochet_and_crafts','jeffersonmason4', 'dmdanamitchell', 
                 'suntanned_superman_', 'laceycooley', 'goulding_jr']
 user_totals = user_totals(users)
-user_totals.describe()
 
+#%%
 #Join df with features and user totals
 full_df = likes_caption_user.join(user_totals, on='user')
 
