@@ -66,6 +66,16 @@ num_followers.opts(xlabel='Number of Followers per User', xticks=5)
 num_followers.redim(x=hv.Dimension('x', range=(0, 1200)))
 
 #%%
+#Make a table of min df and number of words
+total_words = sum(data.number_of_words.values)
+doc_freq = np.arange(0.005, 0.0105, 0.0005)
+num_words = [round(num * total_words, 0) for num in doc_freq]
+percent = doc_freq*100
+
+hv.Table((percent, num_words), ['Document Frequency (percentage)', 'Number of Words'])
+
+
+#%%
 #Create a corpus from the rows in a dataframe
 full_df = pd.read_csv('./all_info.csv', index_col=0)
 
