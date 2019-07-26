@@ -4,6 +4,7 @@ from src.transforming import create_full_df
 from sklearn.feature_extraction.text import TfidfVectorizer 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from sklearn.metrics import confusion_matrix
 
 import pandas as pd 
 import numpy as np
@@ -71,4 +72,8 @@ print("Random Forest Classifier score:", rfc.score(test_x, ytest))
     Classifer score of .901 with 25 trees and min_df .0025, 
     score of .908 with min_df = 0.005
     score of .907 with min_df = 0.0010'''
+#%%
+ytrue = rfc.predict(test_x)
+confusion_matrix(ytest, ytrue).ravel()
+
 #%%
