@@ -34,7 +34,7 @@ Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 #%%
 #Create Tf-idf vectorizer, transform data, 
 # combine tf-idf vector and number of words to feed into model 
-vector_train = TfidfVectorizer(min_df= 0.005)
+vector_train = TfidfVectorizer(min_df= 0.0025)
 caption_vector = vector_train.fit_transform(Xtrain['caption'])
 vocab = vector_train.vocabulary_
 
@@ -53,7 +53,7 @@ test_x = vec_test_df.join(no_caption_test)
 
 #%%
 #Random Forest Regression Model
-rf = RandomForestRegressor(n_estimators = 50, max_features=0.33, n_jobs=-1)
+rf = RandomForestRegressor(n_estimators = 25, max_features=0.33, n_jobs=-1)
 rf.fit(train_x, ytrain)
 print("Random Forest score:", rf.score(test_x, ytest))
 
@@ -61,4 +61,7 @@ print("Random Forest score:", rf.score(test_x, ytest))
 #%%
 '''Score of .61 with min_df=0.005, 10 trees, no user information
     Score of .535 with min_df=0.005, 10 trees and user information
-    Score of .545 with min_df=0.005, 50 trees and user information '''
+    Score of .545 with min_df=0.005, 50 trees and user information 
+    
+    Score of .606 with min_df = 0.0025, 50 trees, user information
+    Score of .601 with min_df=0.0025, 25 trees, user information '''
