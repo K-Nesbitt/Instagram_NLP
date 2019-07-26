@@ -65,10 +65,41 @@ def add_word_count(df):
 	df['number_of_words'] = df['caption'].apply(lambda x: len(x.split()))
 	return df
 
+def add_user_totals(current_df, file_path_totals = './user_totals.csv'):
+        totals_df = pd.read_csv('./user_totals.csv', header=0, names = ['user', 'user_posts', 'user_followers'])
+        new_df = current_df.merge(totals_df, how = 'left', on='user')
+        return new_df
+
+def add_user_avg_likes(df):
+        users = df.user.unique()
+        likes_avg = {}
+        for u in users:
+                mean = df[df.user == u]['number_of_likes'].mean()
+                likes_avg[u]=round(mean, 0)
+        df['user_avg_likes'] = df['user'].map(likes_avg)
+        return df
+
+def make_user_dummies(df):
+        user_dummies = pd.get_dummies(df['user'])
+        new_df = pd.concat((df, user_dummies), axis=1).drop(columns='user')
+        return new_df
+
 def create_full_df(path):
+        '''This function is the pipeline for the data 
+        that combines the previous functions.
+        
+        Parameter: the path to the folder with all stored csv's 
+        of user photo information (likes and caption)
+
+        Returns: dataframe ready for train and test'''
+
         df = csvs_to_df(path)
         df = clean_text(df)
         df = add_word_count(df)
+        df = add_user_totals(df)
+        df = add_user_avg_likes(df)
+        df = make_user_dummies(df)
+        
         return df
 
 def create_corpus(df, column= 'caption'):
