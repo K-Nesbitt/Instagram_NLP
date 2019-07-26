@@ -1,13 +1,17 @@
 #%%
-from src.transforming import create_full_df
+from src.transforming import create_full_df, get_top_n_words
 
-from sklearn.feature_extraction.text import TfidfVectorizer 
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import confusion_matrix
 
 import pandas as pd 
 import numpy as np
+from collections import Counter
+
+import holoviews as hv 
+hv.extension('bokeh')
 
 
 #%%
@@ -25,8 +29,8 @@ Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 
 #%%
 #Create Tf-idf vectorizer, transform data, 
-# combine tf-idf vector and number of words to feed into model 
-vector_train = TfidfVectorizer(min_df= 0.0010)
+# combine tf-idf vector and other features to feed into model 
+vector_train = TfidfVectorizer(min_df= 0.0025)
 caption_vector = vector_train.fit_transform(Xtrain['caption'])
 vocab = vector_train.vocabulary_
 
@@ -65,6 +69,7 @@ rfc.fit(train_x, ytrain)
 
 print("Random Forest Classifier score:", rfc.score(test_x, ytest))
 
+#%%
 '''Classifier score of .891 with 25 trees
     only 25% of the data is over the mean therefore it is easier
     to predict
@@ -75,5 +80,23 @@ print("Random Forest Classifier score:", rfc.score(test_x, ytest))
 #%%
 ytrue = rfc.predict(test_x)
 confusion_matrix(ytest, ytrue).ravel()
+
+#%%
+#top_words = get_top_n_words(data.caption.values, n=10)
+frequency = hv.Scatter(top_words)
+frequency.opts(size=7, title='Word Frequency', xlabel='Word', ylabel='Number of Times in Corpus')
+
+
+#%%
+
+avg_likes = [(i, avg) for i, avg in enumerate(data.user_avg_likes.unique())]
+avg_likes
+
+#%%
+hv.Histogram((np.histogram(data.user_avg_likes.values), 20))
+
+
+#%%
+hv.Scatter(avg_likes).opts(size=7, title='Average Likes by User', xlabel='User ID', ylabel='Averge Number of Likes')
 
 #%%
