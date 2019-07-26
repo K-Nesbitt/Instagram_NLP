@@ -27,8 +27,11 @@ new_df = pd.concat((complete_df, user_dummies), axis=1).drop(columns='user')
 
 new_df.head()
 #%%
+mu = round(new_df['number_of_likes'].mean(), 0)
+cls_target = new_df['number_of_likes'].apply(lambda x: 0 if x <= mu else 1)
+
 X = new_df.iloc[:,1:]
-y = new_df.iloc[:,0].values
+y = cls_target.values
 Xtrain, Xtest, ytrain, ytest = train_test_split(X, y)
 
 #%%
@@ -65,3 +68,16 @@ print("Random Forest score:", rf.score(test_x, ytest))
     
     Score of .606 with min_df = 0.0025, 50 trees, user information
     Score of .601 with min_df=0.0025, 25 trees, user information '''
+
+#%%
+from sklearn.ensemble import RandomForestClassifier
+
+rfc = RandomForestClassifier(n_estimators=25, n_jobs=-1)
+rfc.fit(train_x, ytrain)
+
+print("Random Forest Classifier score:", rfc.score(test_x, ytest))
+
+'''Classifier score of .891 with 25 trees
+    only 25% of the data is over the mean therefore it is easier
+    to predict'''
+#%%
