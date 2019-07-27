@@ -82,7 +82,7 @@ ytrue = rfc.predict(test_x)
 confusion_matrix(ytest, ytrue).ravel()
 
 #%%
-#top_words = get_top_n_words(data.caption.values, n=10)
+top_words = get_top_n_words(data.caption.values, n=10)
 frequency = hv.Scatter(top_words)
 frequency.opts(size=7, title='Word Frequency', xlabel='Word', ylabel='Number of Times in Corpus')
 
