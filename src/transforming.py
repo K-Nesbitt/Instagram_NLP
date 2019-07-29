@@ -68,7 +68,7 @@ def add_word_count(df):
 	return df
 
 def add_user_totals(current_df, file_path_totals = './user_totals.csv'):
-        totals_df = pd.read_csv('./user_totals.csv', header=0, names = ['user', 'user_posts', 'user_followers'])
+        totals_df = pd.read_csv('./data/user_totals.csv', header=0, names = ['user', 'user_posts', 'user_followers'])
         new_df = current_df.merge(totals_df, how = 'left', on='user')
         return new_df
 

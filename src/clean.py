@@ -4,7 +4,7 @@ from src.transforming import create_full_df, get_top_n_words
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 import pandas as pd 
 import numpy as np
@@ -81,6 +81,8 @@ print("Random Forest Classifier score:", rfc.score(test_x, ytest))
 ytrue = rfc.predict(test_x)
 confusion_matrix(ytest, ytrue).ravel()
 
+#%%
+accur
 #%%
 top_words = get_top_n_words(data.caption.values, n=10)
 frequency = hv.Scatter(top_words)
