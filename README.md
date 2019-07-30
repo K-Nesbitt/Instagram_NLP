@@ -14,13 +14,28 @@ As social media progresses so does business marketing. Many companies are now ch
 
 I used Natural Language Processing techniques and Machine Learning algorithms to predict which Instagram post will resonate most by analyzing caption text. The results of this project can lead to better marketing insights with social media platforms who advertise mainly by text. 
 
-**Technologies Used::** 
+**Technologies Used:** 
 Python, Pandas, Numpy, Selenium, Holoviews, Scikit-learn, NLTK, Regex
 
 
 ## Data Analysis
+I collected data on Instagram by using the Selenium chrome webdriver. I scraped 25 different users and collected a total of 11,529 captions with the number of likes. I also included the number of words in the caption, the users id, their total number of posts and total number of followers. 
 
+The distribution of the number of likes is ___ as most people have less than 50 likes per post. 
+![pic2](https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/distribution_of_likes.png)
 
+So the question continues, what causes certain posts to have more the average number of likes? For this set of data the average number of likes is 42. 
+
+![pic3](https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/avg_likes_by_user.png)
+
+I graphed the length of the caption vs the number of likes but found no correlation
+
+![pic4](https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/bokeh_words_likes.png)
+
+After processing the text in the captions with NLTK, I had a corpus of over 120,000 words. These were some of the top used words:
+
+![pic5](https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/word_freq.png)
+The word used most often was **LOVE**. All of these top used words are considered positive, thus it was concluded that users posted a photo when they were in a good mood. 
 
 ## Results
 I ran the train and test sets on a Random Forest with 100 trees, and a Linear Regression.
