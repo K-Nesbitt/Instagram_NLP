@@ -3,13 +3,10 @@ import glob
 import re
 
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize, punkt
 from nltk.stem import PorterStemmer
 
 from sklearn.feature_extraction.text import CountVectorizer
 
-import nltk
-nltk.download('punkt')
 
 def csvs_to_df(path):
         '''This function will convert all csv'slocated in the same folder
@@ -17,7 +14,7 @@ def csvs_to_df(path):
 
         Parameters: the path of the data folder with csv's
 
-        Returns: the combined dataframe. '''
+        Returns: the combined dataframe '''
 
         concat_df = pd.DataFrame()
 
@@ -58,21 +55,42 @@ def clean_text(df):
         df['caption'] = df['caption'].apply(lambda row: 
                                 " ".join([port.stem(word) for word in row.split() if word not in s_stop]))
 
-        #tokenize the words
-        #df['caption'] = df['caption'].apply(lambda row: word_tokenize(' '.join(row)))
 
         return df
 
 def add_word_count(df):
+        '''This function will count the length of the caption once split. 
+        This will count words, emojis, and characters separated by a space.
+
+        Parameters: the dataframe with the caption column.
+        
+        Returns: new dataframe with a 'number of words column'. 
+        '''
+
 	df['number_of_words'] = df['caption'].apply(lambda x: len(x.split()))
 	return df
 
 def add_user_totals(current_df, file_path_totals = './user_totals.csv'):
+        '''This function will add the columns for user total posts and user total followers 
+        by row. 
+        Parameters: dataframe, and file path with user total posts and followers information.
+        
+        Returns: new dataframe with information on user post and followers.
+        '''
+
         totals_df = pd.read_csv('./data/user_totals.csv', header=0, names = ['user', 'user_posts', 'user_followers'])
         new_df = current_df.merge(totals_df, how = 'left', on='user')
         return new_df
 
 def add_user_avg_likes(df):
+        '''This function will calculate and add the average number of likes by user
+        to each row by the user. 
+
+        Parameters: dataframe
+
+        Returns: new dataframe with additional column of user average likes. 
+        '''
+        
         users = df.user.unique()
         likes_avg = {}
         for u in users:
@@ -81,9 +99,16 @@ def add_user_avg_likes(df):
         df['user_avg_likes'] = df['user'].map(likes_avg)
         return df
 
-def make_user_dummies(df):
-        user_dummies = pd.get_dummies(df['user'])
-        new_df = pd.concat((df, user_dummies), axis=1).drop(columns='user')
+def make_user_dummies(df, column_name = 'user'):
+        '''This function will turn the 'user' column into  multiple columns
+        by the username with 0 or 1 if the row is the user. 
+
+        Parameters: dataframe and column name of the users
+
+        Returns: dataframe with multiple columns for each username'''
+
+        user_dummies = pd.get_dummies(df[column_name])
+        new_df = pd.concat((df, user_dummies), axis=1).drop(columns=column_name)
         return new_df
 
 def create_full_df(path):
@@ -104,52 +129,17 @@ def create_full_df(path):
         
         return df
 
-def create_corpus(df, column= 'caption'):
-        '''Create a corpus from each row in the dataframe to use
-        on train and test sets.
-
-        Parameters: a dataframe and column to make a corpus
-
-        Returns: a corpus (list of strings in same index order as dataframe)
-        '''
-
-        corpus = []
-        for row in df[column]:
-                r_string = str(' '.join(row))
-                clean_string = re.sub('\W+',' ', r_string)
-                corpus.append(clean_string)
-        
-        return corpus
-def tokenize_corpus(corpus):
-        '''Removes special characters and emojis and separate the corpus
-        by individual words. 
-
-        Parameters: the corpus (a list of strings)
-
-        Returns: a list of words
-        '''
-        corpus_two = []
-        for i in range(len(corpus)):
-                words = word_tokenize(corpus[i])
-                for j in range(len(words)):
-                        corpus_two.append(words[j])
-        
-        return corpus_two
 
 def get_top_n_words(corpus, n=None):
-    """
-    List the top n words in a vocabulary according to occurrence in a text corpus.
-    
-    get_top_n_words(["I love Python", "Python is a language programming", "Hello world", "I love the world"]) -> 
-    [('python', 2),
-     ('world', 2),
-     ('love', 2),
-     ('hello', 1),
-     ('is', 1),
-     ('programming', 1),
-     ('the', 1),
-     ('language', 1)]
-    """
+    '''
+    This fucntion will list the top n words in a vocabulary according 
+    to occurrence in a text corpus.
+
+    Parameters: corpus (list of strings), n (the number of words)
+
+    Returns: a list of the top n words in descending order. 
+    '''
+
     vec = CountVectorizer().fit(corpus)
     bag_of_words = vec.transform(corpus)
     sum_words = bag_of_words.sum(axis=0) 
