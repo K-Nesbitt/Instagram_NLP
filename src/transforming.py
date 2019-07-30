@@ -63,12 +63,12 @@ def add_word_count(df):
         This will count words, emojis, and characters separated by a space.
 
         Parameters: the dataframe with the caption column.
-        
+
         Returns: new dataframe with a 'number of words column'. 
         '''
 
-	df['number_of_words'] = df['caption'].apply(lambda x: len(x.split()))
-	return df
+        df['number_of_words'] = df['caption'].apply(lambda x: len(x.split()))
+        return df
 
 def add_user_totals(current_df, file_path_totals = './user_totals.csv'):
         '''This function will add the columns for user total posts and user total followers 
@@ -131,18 +131,18 @@ def create_full_df(path):
 
 
 def get_top_n_words(corpus, n=None):
-    '''
-    This fucntion will list the top n words in a vocabulary according 
-    to occurrence in a text corpus.
+        '''
+        This fucntion will list the top n words in a vocabulary according 
+        to occurrence in a text corpus.
 
-    Parameters: corpus (list of strings), n (the number of words)
+        Parameters: corpus (list of strings), n (the number of words)
 
-    Returns: a list of the top n words in descending order. 
-    '''
+        Returns: a list of the top n words in descending order. 
+        '''
 
-    vec = CountVectorizer().fit(corpus)
-    bag_of_words = vec.transform(corpus)
-    sum_words = bag_of_words.sum(axis=0) 
-    words_freq = [(word, sum_words[0, idx]) for word, idx in vec.vocabulary_.items()]
-    words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
-    return words_freq[:n]
+        vec = CountVectorizer().fit(corpus)
+        bag_of_words = vec.transform(corpus)
+        sum_words = bag_of_words.sum(axis=0) 
+        words_freq = [(word, sum_words[0, idx]) for word, idx in vec.vocabulary_.items()]
+        words_freq =sorted(words_freq, key = lambda x: x[1], reverse=True)
+        return words_freq[:n]
