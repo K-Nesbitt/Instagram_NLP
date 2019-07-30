@@ -4,6 +4,7 @@ __pycache__/
 .ipynb
 .DS_store
 settings.json
+.vscode
 
 # C extensions
 *.so
