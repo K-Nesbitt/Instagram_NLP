@@ -21,7 +21,6 @@ data = create_full_df(data_path)
 data.head()
 
 #%%
-
 target = data['number_of_likes'].apply(lambda x: 0 if x <= data.user_avg_likes[x] else 1)
 
 X = data.iloc[:, 1:]
@@ -47,21 +46,6 @@ caption_test_vector = vector_test.fit_transform(Xtest['caption'])
 vec_test_df = pd.DataFrame(caption_test_vector.todense(), index=Xtest['caption'].index)
 no_caption_test = Xtest.iloc[:,1:]
 test_x = vec_test_df.join(no_caption_test)
-
-#%%
-#Random Forest Regression Model
-rf = RandomForestRegressor(n_estimators = 25, max_features=0.33, n_jobs=-1)
-rf.fit(train_x, ytrain)
-print("Random Forest score:", rf.score(test_x, ytest))
-
-
-#%%
-'''Score of .61 with min_df=0.005, 10 trees, no user information
-    Score of .535 with min_df=0.005, 10 trees and user information
-    Score of .545 with min_df=0.005, 50 trees and user information 
-    
-    Score of .606 with min_df = 0.0025, 50 trees, user information
-    Score of .601 with min_df=0.0025, 25 trees, user information '''
 
 #%%
 
