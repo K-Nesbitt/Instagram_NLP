@@ -1,27 +1,24 @@
 #%%
-from src.transforming import create_full_df, get_top_n_words
+from src.transforming import create_full_df
 
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from sklearn.metrics import confusion_matrix, classification_report
-from sklearn import preprocessing
 
 import pandas as pd 
 import numpy as np
-from collections import Counter
-
-import holoviews as hv 
-hv.extension('bokeh')
 
 
 #%%
-data_path = '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2'
+#Create dataframe from files in folder. 
+data_path = '/Users/keatra/Galvanize/Projects/Instagram_NLP/users'
 data = create_full_df(data_path)
 data.head()
 
 #%%
-target = data['number_of_likes'].apply(lambda x: 0 if x <= data.user_avg_likes[x] else 1)
+#Create a target label for above or below average number of likes. 
+target = data['number_of_likes'].apply(lambda x: 1 if x > data.user_avg_likes[x] else 0)
 
 X = data.iloc[:, 1:]
 y = target.values
@@ -48,42 +45,17 @@ no_caption_test = Xtest.iloc[:,1:]
 test_x = vec_test_df.join(no_caption_test)
 
 #%%
-
+#Feed in tf-idf and other features to Random Forest Model to make predictions. 
 rfc = RandomForestClassifier(n_estimators=25, n_jobs=-1)
 rfc.fit(train_x, ytrain)
 
 print("Random Forest Classifier score:", rfc.score(test_x, ytest))
 
 #%%
-'''Classifier score of .891 with 25 trees
-    only 25% of the data is over the mean therefore it is easier
-    to predict
-    
-    Classifer score of .901 with 25 trees and min_df .0025, 
-    score of .908 with min_df = 0.005
-    score of .907 with min_df = 0.0010'''
-#%%
+#Get confusion matrix results 
 ypred = rfc.predict(test_x)
 confusion_matrix(ytest, ypred).ravel()
 
-#%%
 
-#%%
-top_words = get_top_n_words(data.caption.values, n=10)
-frequency = hv.Scatter(top_words)
-frequency.opts(size=7, title='Word Frequency', xlabel='Word', ylabel='Number of Times in Corpus')
-
-
-#%%
-
-avg_likes = [(i, avg) for i, avg in enumerate(data.user_avg_likes.unique())]
-avg_likes
-
-#%%
-hv.Histogram((np.histogram(data.user_avg_likes.values), 20))
-
-
-#%%
-hv.Scatter(avg_likes).opts(size=7, title='Average Likes by User', xlabel='User ID', ylabel='Averge Number of Likes')
 
 #%%
