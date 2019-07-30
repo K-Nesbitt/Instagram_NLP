@@ -16,7 +16,7 @@ data.head()
 #%%
 #Graph a histogram of the  number of likes 
 num_likes = hv.Histogram(np.histogram(data['number_of_likes'], 250))
-num_likes.opts(xlabel='Number of Likes', xticks=10)
+num_likes.opts(title='Number of Likes Frequency', xlabel='Amount of Likes', xticks=10)
 num_likes.redim(x=hv.Dimension('x', range=(0, 200)))
 
 #%%
@@ -29,7 +29,7 @@ words_likes.redim(x=hv.Dimension('x', range=(0, 100)), y=hv.Dimension('y', range
 
 #%%
 #Graph a histogram of the number of words per document
-hv.Histogram(np.histogram(data['number_of_words'].values)).opts(xlabel='Number of Words in caption')
+hv.Histogram(np.histogram(data['number_of_words'].values)).opts(title='Words in Caption', xlabel='Number of Words')
 
 #%%
 #Calculate and graph the frequency of the top 10 words
@@ -46,17 +46,18 @@ hv.Scatter(avg_likes).opts(size=7, title='Average Likes by User', xlabel='User I
 
 
 #%%
-#!!! fix
 # Plot the number of posts
-num_posts = hv.Histogram(np.histogram(user_totals['number_of_posts'], 50))
-num_posts.opts(xlabel='Number of Posts per User', xticks=10)
-num_posts.redim(x=hv.Dimension('x', range=(0, 800)))
-num_posts.redim(y=hv.Dimension('y', range=(0, 4)))
+user_posts = [(i, p) for i, p in enumerate(data.user_posts.unique())]
+hv.Scatter(user_posts).opts(size=7, title='User Number of Posts', xlabel='User ID', ylabel='Number of Posts')
 
 
 #%%
-#!!!fix 
 #Plot the number of followers
+user_followers = [(i, f) for i, f in enumerate(data.user_followers.unique())]
+hv.Scatter(user_posts).opts(size=7, title='User Number of Followers', xlabel='User ID', ylabel='Number of Followers')
+
+
+#%%
 num_followers = hv.Histogram(np.histogram(drop_high_users['number_of_followers'], 50))
 num_followers.opts(xlabel='Number of Followers per User', xticks=5)
 num_followers.redim(x=hv.Dimension('x', range=(0, 1200)))
