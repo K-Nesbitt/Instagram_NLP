@@ -32,18 +32,24 @@ def login(my_username, my_password):
         #Login
         driver.find_element_by_xpath("//*[contains(text(), 'Log In')]").click()
         time.sleep(5)
-        '''driver.find_element_by_xpath("//*[contains(text(), 'Not Now')]").click()
+        
+        '''
+        This step was commented out because when using the headless option, the 
+        pop up alert is not present. 
+
+        driver.find_element_by_xpath("//*[contains(text(), 'Not Now')]").click()
         time.sleep(3)'''
+
         #go to profile page
         driver.find_element_by_css_selector("a[href*='/"+my_username+"/']").click()
         
         return driver
 
 def totals(webdriver):
-        '''This function will get the total number of posts, followers, 
-        and following for what ever page the webdriver is on. 
+        '''This function will get the total number of posts and followers
+        for the user profile page that the webdriver is currently on. 
 
-        Parameters: the webdrive that is active
+        Parameters: the active webdriver 
 
         Returns: tuple of the total posts and total followers.'''
 
@@ -55,26 +61,29 @@ def totals(webdriver):
         followers_element = [x for x in list_elements if x.text.find('followers') != -1]
         total_followers = followers_element[0].text
 
-        #I commented this code out because it was not useful in my data but I still
-        # wanted to keep the code if I ever decided to use it. 
-        #following_element = [x for x in list_elements if x.text.find('following') != -1]
-        #total_following = following_element[0].text   
+       ''' I commented out finding the total number of people the user is following
+        because it was not useful in my data collection at the time but I still wanted 
+        to keep the code if I ever decided to use it. 
+
+        following_element = [x for x in list_elements if x.text.find('following') != -1]
+        total_following = following_element[0].text'''   
 
         return total_posts, total_followers
 
 
 def get_picture_links(webdriver, total_posts):
         '''This function will find all links that have
-        pictures on the page
+        pictures on the page. Note that there are only about 12 photos per page
+        so the program will 'scroll' as many times as necessary to get all photos.
 
-        Parameters: the active webdriver, the total posts on that page
+        Parameters: the active webdriver, the total posts for that user
 
-        Returns: a set of links to pictures and videos
+        Returns: a set of picture and video links
         '''
         posts = total_posts.split(' ')[0].replace(',', '')
         num_posts = int(posts)   
-        pages = (num_posts//12) #we divide by 12 because that is the average number of displayed
-                                #photos by page
+        pages = (num_posts//12) #This will determine how many times we scroll on a page
+                                
         
         link_set = set()
         html = webdriver.find_element_by_tag_name('html')
@@ -83,7 +92,7 @@ def get_picture_links(webdriver, total_posts):
                 all_links = webdriver.find_elements_by_tag_name('a')   
                 for link in all_links:
                         picture_link = link.get_attribute('href') 
-                        if picture_link.find('/p/') != -1:
+                        if picture_link.find('/p/') != -1: #only adding links that have are pictures
                                 link_set.add(picture_link)
                         
                 html.send_keys(Keys.END)
@@ -94,13 +103,14 @@ def get_picture_links(webdriver, total_posts):
 def scrape_page(webdriver, links, username):
         '''This function will go to all links provided
         and scrape each picture for the number of likes
-        and the caption. It will only provide the caption if the 
-        identified user is the title
+        and the caption. If the link is a video no information is recorded. 
+        The function will only save the caption if the title is the 
+        identified user
         
         Parameters: the active webdriver, a set of picture links, 
         the username of the page your are scraping
 
-        Returns: a list of list with the number of likes and caption
+        Returns: a list of lists with the number of likes and caption
         '''
         picture_info = []
 
@@ -118,7 +128,7 @@ def scrape_page(webdriver, links, username):
 
                         if len(likes_list) != 0: #If the length is 0, then it is a video
                                 
-                                if len(likes_list) == 1:
+                                if len(likes_list) == 1: #No common friends liked the photo
                                         num_likes = webdriver.find_elements_by_class_name('Nm9Fw')[0].text.split(' ')[0]
                                 
                                 else:
@@ -128,13 +138,15 @@ def scrape_page(webdriver, links, username):
                                         title = webdriver.find_element_by_class_name('_6lAjh').text
                                         if title == username:
                                                 caption_list = webdriver.find_elements_by_xpath("//div[@class='C4VMK']//span")
-                                                #This code works but not active since I did not use the information
-                                                # num_of_comments = len(caption_list)
+                                                
+                                                '''This code works but not active since I did not use the information
+                                                num_of_comments = len(caption_list)'''
+                                                
                                                 caption = caption_list[0].text
                                         else:
-                                                caption = None
+                                                caption = None #if the user was not the title
                                 except:
-                                        caption = None
+                                        caption = None #photo does not have a caption or any comments
                                         
 
                                 picture_info.append([num_likes, caption])
@@ -148,15 +160,16 @@ def scrape_page(webdriver, links, username):
        
         return picture_info
  
-def users_scrape_save(my_username, my_password, users):
-        '''This function will scrape a given set of users pages and 
-        save the information by page into a csv in the data folder of the directory. 
+def users_scrape_save(my_username, my_password, users, folder_name):
+        '''This function will log into Instagram and scrape a given set of user pages and 
+        save the information by page into a csv in the given folder name.  
 
-        Parameters: Instagram username and password, list of usernames for other people,
+        Parameters: Instagram username and password, list of usernames,
+        and the name of the folder to save the data to. 
         
         Returns: None. Files are saved as the program is running. '''
 
-        #Assumes original driver was closed and will log in to Instagram
+        #First logs in to Instagram
         IGdriver = login(my_username, my_password)
 
         for user in users:
@@ -170,20 +183,18 @@ def users_scrape_save(my_username, my_password, users):
                 user_info = scrape_page(IGdriver, user_links, user)
 
                 df = pd.DataFrame(user_info, columns=['number_of_likes', 'caption'])
-                df.to_csv(path_or_buf= '/Users/keatra/Galvanize/Projects/Instagram_likes_nlp/data_2/{}.csv'.format(user))
+                df.to_csv(path_or_buf= './{}/{}.csv'.format(folder_name, user))
         return None
 
 
-def user_totals(names):
-	#Read in username and password from file
-	u = open('/Users/keatra/.ssh/IG_username.txt', 'r')
-	p = open('/Users/keatra/.ssh/IG_password.txt', 'r')
-	my_username = u.read().strip('\n')
-	my_password = p.read().strip('\n')
-	u.close()
-	p.close()
+def user_totals(username, password, users):
+	'''Since the totals function does not save users total posts and total followers, 
+        this function will go through each user and save their information to a dataframe
+        for later reference. 
 
-	#Collect data on each person's total posts and followers. 
+        Parameters: Instagram username and password, and list of usernames
+
+        Returns: Dataframe with username, total posts, and total followers. '''
 	
 	totals_dict = {}
 	driver = login(my_username, my_password)
