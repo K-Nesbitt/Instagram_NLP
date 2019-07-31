@@ -50,5 +50,9 @@ I then added more features to the transformed matrix (number of words, user id, 
 <img src= "https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/Screen%20Shot%202019-07-30%20at%207.48.35%20PM.png" width="300" height="200">
 
 
-## Reflection
+## Future Work
+
+## Acknowledgments 
+
+I want to thank Joe Gartner, Dan Rupp,  Brent Goldberg, and my fellow peers for helpful guidance and feedback during the development of this project. 
 
