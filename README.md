@@ -47,6 +47,7 @@ I used the transformed matrix of captions with a Random Forest Regressor but cou
 
 I then added more features to the transformed matrix (number of words, user id, total followers, total posts) to make my prediction. I also changed the target from an actual value to a classification of above or below that users average number of likes. This made the model more specific to capture estimates for particular users. With a Random Forest Classifier I was able to get a precision score of 0.85 and recall of 0.58. The full summary of results are stated in the confusion matrix below:
 
+<img src= "https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/Screen%20Shot%202019-07-30%20at%207.48.35%20PM.png" width="300" height="200">
 
 
 ## Reflection
