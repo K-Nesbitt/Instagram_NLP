@@ -33,7 +33,6 @@ There appears to be no linear relationships in the data, so I have to consider a
 <img src="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/bokeh_words_likes.png" width="350" height="350">
 
 ## Data Engineering
-
 After processing the text in the captions with NLTK, I had a corpus of over 120,000 words. These were some of the words used most often:
 
 <img src="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/word_freq.png" width="350" height="350">
@@ -51,8 +50,10 @@ I then added more features to the transformed matrix (number of words, user id, 
 
 
 ## Future Work
+I still think there can be improvements to identifying what captions and other features help predict the number of likes. I would like to conduct topic modeling on the captions to identify groups of photos. I would also like to scrap my data again and collect the AI photo description provided in the Instagram HTML. 
+
+The goal would be to have this tool accessible to the public so people can use it for their social media advertisements. 
 
 ## Acknowledgments 
-
-I want to thank Joe Gartner, Dan Rupp,  Brent Goldberg, and my fellow peers for helpful guidance and feedback during the development of this project. 
+I want to thank Joe Gartner, Dan Rupp, Brent Goldberg, and my fellow peers for helpful guidance and feedback during the development of this project. 
 
