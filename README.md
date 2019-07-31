@@ -21,7 +21,7 @@ Python, Pandas, Numpy, Selenium, Holoviews, Scikit-learn, NLTK, Regex
 ## Data Analysis
 I collected data on Instagram by using the Selenium Chrome webdriver. I scraped 25 different users and collected a total of 11,529 captions with the number of likes. I also included the number of words in the caption, the users id, their total number of posts and total number of followers. 
 
-The distribution of the number of likes is exponential with a lowering trend towards infinity.  
+The distribution of the number of likes is exponential with a lowering trend towards the maximum number of likes.  
 <img src="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/distribution_of_likes.png" width="350" height="350">
 
 So the question continues, what causes certain posts to have more the average number of likes? For this set of data the average number of likes is 42. 
@@ -29,27 +29,25 @@ So the question continues, what causes certain posts to have more the average nu
 <img src="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/avg_likes_by_user.png" width="350" height="350">
 
 
-I graphed the length of the caption vs the number of likes but found no correlation
+There appears to be no linear relationships in the data, so I have to consider a model that does not depend on a linear relationship. 
 <img src="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/bokeh_words_likes.png" width="350" height="350">
 
 ## Data Engineering
 
-After processing the text in the captions with NLTK, I had a corpus of over 120,000 words. These were some of the top used words:
+After processing the text in the captions with NLTK, I had a corpus of over 120,000 words. These were some of the words used most often:
 
 <img src="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/word_freq.png" width="350" height="350">
 
-The word used most often was **LOVE**. All of these top used words are considered positive, thus it was concluded that users posted a photo when they were in a good mood. 
+The word used most was **LOVE**. All of these top used words are considered positive, thus it was concluded that users posted a photo when they were in a good mood. 
 
-I then created a TF-IDF matrix with .25% of the words (about 600). Each caption then became a vector representing the presence of words included in the TF-IDF vocabulary set. 
+I created a TF-IDF matrix with .25% of the words (about 600). Each caption then became a vector representing the presence of words included in the TF-IDF vocabulary set. 
 
 ## Results
-I ran the train and test sets on a Random Forest with 100 trees, and a Linear Regression.
+I used the transformed matrix of captions with a Random Forest Regressor but could not predict the exact number of likes. 
 
-                    Random Forest score: -0.07604367797726175
-                    
-                    Linear Regression score: -0.05412067220144978 
+I then added more features to the transformed matrix (number of words, user id, total followers, total posts) to make my prediction. I also changed the target from an actual value to a classification of above or below that users average number of likes. This made the model more specific to capture estimates for particular users. With a Random Forest Classifier I was able to get a precision score of 0.85 and recall of 0.58. The full summary of results are stated in the confusion matrix below:
 
-I played around with a few parameters but my conclusion is that my data was too sparse, there was errors in my scraping code, there was no correlation between captions and number of likes, and I needed more features in the data set. 
+
 
 ## Reflection
 
