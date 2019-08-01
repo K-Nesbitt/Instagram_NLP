@@ -21,10 +21,15 @@ Python, Pandas, Numpy, Selenium, Holoviews, Scikit-learn, NLTK, Regex
 ## Data Analysis
 I collected data on Instagram by using the Selenium Chrome webdriver. I scraped 25 different users and collected a total of 11,529 captions with the number of likes. I also included the number of words in the caption, the users id, their total number of posts and total number of followers. 
 
-Of the 25 uers the average number of posts was 785. 
+Of the 25 users the average number of posts was 785.  
+
+
 <img src="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/num__of_posts.png" width="350" height="350">
 
+
 They had on average 676 number of followers on the date that data was scraped (June 22, 2019). 
+
+
 <img src ="https://github.com/K-Nesbitt/Instagram_NLP/blob/master/images/num_of_followers.png" width="350" height="350">
 
 There were a couple of outliers with the number of posts and followers but most were around the same range. I did exclude two users from the data because their number of followers was over 14,000. 
